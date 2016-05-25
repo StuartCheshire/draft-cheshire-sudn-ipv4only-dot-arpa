@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+
+<!-- Check output with <http://tools.ietf.org/tools/idnits/> -->
+
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.35) -->
+
+<!-- give errors regarding ID-nits and DTD validation -->
+<?rfc strict="yes" ?>
+
+<!-- control the table of contents (ToC) -->
+<!-- generate a ToC -->
+<?rfc toc="no"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<?rfc tocdepth="1"?>
+
+<!-- control references -->
+<!-- use anchors instead of numbers for refs, i.e, [RFC2119] instead of [1] -->
+<?rfc symrefs="yes"?>
+<!-- sort the reference entries alphabetically -->
+<?rfc sortrefs="no" ?>
+
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<!-- do not start each main section on a new page -->
+<?rfc compact="yes" ?>
+<!-- keep one blank line between list items -->
+<?rfc subcompact="no" ?>
+
+<!-- encourage use of "xml2rfc" tool -->
+<?rfc rfcprocack="yes" ?>
+<!-- end of list of popular I-D processing instructions -->
+
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-01" ipr="trust200902" updates="7050">
+  <front>
+    <title abbrev="Dot Home">Special Use Domain Name 'ipv4only.arpa'</title>
+
+    <author initials='S.' surname='Cheshire' fullname='Stuart Cheshire'>
+      <organization>Apple Inc.</organization>
+      <address>
+        <postal>
+          <street>1 Infinite Loop</street>
+          <city>Cupertino</city>
+          <region>California</region>
+          <code>95014</code>
+          <country>USA</country>
+        </postal>
+        <phone>+1 408 974 3207</phone>
+        <email>cheshire@apple.com</email>
+      </address>
+    </author>
+
+    <author initials='D.' surname='Schinazi' fullname='David Schinazi'>
+      <organization>Apple Inc.</organization>
+      <address>
+        <postal>
+          <street>1 Infinite Loop</street>
+          <city>Cupertino</city>
+          <region>California</region>
+          <code>95014</code>
+          <country>USA</country>
+        </postal>
+        <phone>+1 669 227 9921</phone>
+        <email>dschinazi@apple.com</email>
+      </address>
+    </author>
+
+    <date day='19' month='May' year='2016'/>
+
+    <abstract>
+      <t>The document
+      "Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis" [RFC7050]
+      specifies the Special Use Domain Name 'ipv4only.arpa',
+      with certain precise special properties, but, perversely, the
+      Domain Name Reservation Considerations section [RFC6761]
+      in that document then goes on to deny the specialness of that name,
+      and (as of May 2016) the name 'ipv4only.arpa' does not appear
+      in the Special-Use Domain Names registry.</t>
+
+      <t>This document updates RFC 7050 with a more appropriate summary of
+      the legitimate and useful special properties of the name ipv4only.arpa.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <?rfc needLines="10" ?>
+    <section title="Introduction">
+      <t>The document
+      <xref target="RFC7050">"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis"</xref>
+      specifies the Special Use Domain Name 'ipv4only.arpa',
+      with certain precise special properties, but, perversely, the
+      <xref target="RFC6761">Domain Name Reservation Considerations section</xref>
+      in that document denies the specialness of that name,
+      and (as of May 2016) the name 'ipv4only.arpa' does not appear
+      in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
+
+      <t>As a result of the name 'ipv4only.arpa' being formally declared to have
+      no special properties, there was no mandate for software to treat this name
+      specially. Consequently, queries for this name have to be handled normally,
+      and result in a large volume of unnecessary queries to the 'arpa' name servers.</t>
+
+      <t>At times, for reasons that are as yet
+      unclear, the 'arpa' name servers have been observed to be slow or unresponsive.
+      The failures of these 'ipv4only.arpa' queries result in failures of
+      software that depends on them for NAT64 address synthesis.</t>
+
+      <t>Having millions of devices around the world issue these queries generates
+      pointless additional load on the 'arpa' name servers, which is completely
+      unnecessary when this name is defined, by Internet Standard, to have only
+      two address records, 192.0.0.170 and 192.0.0.171, and no other records.</t>
+
+      <t>To remedy this situation, this document updates RFC 7050 with a more appropriate
+      <xref target="RFC6761">Domain Name Reservation Considerations section</xref>
+      that properly lists the desirable and beneficial special handling for ipv4only.arpa.</t>
+    </section>
+
+    <section anchor="terminology" title="Conventions and Terminology Used in this Document">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL"
+      in this document are to be interpreted as described in "Key words for use
+      in RFCs to Indicate Requirement Levels" <xref target="RFC2119"/>.</t>
+    </section>
+
+    <?rfc needLines="7" ?>
+    <section title="Security Considerations">
+      <t>Hard-coding the answers for ipv4only.arpa queries avoids the risk of
+      malicious devices intercepting those queries and returning incorrect answers.</t>
+      
+      <t>DNSSEC signing issues for the ipv4only.arpa address records don't apply, since
+      the only use of the ipv4only.arpa name is to trigger synthesis of NAT64 AAAA
+      records, which aren't signed by arpa anyway.</t>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>[Once published, this should say]<vspace />
+      IANA has recorded the name 'ipv4only.arpa' in the
+      <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
+
+      <section title="Domain Name Reservation Considerations">
+        <t>The name 'ipv4only.arpa' is special only to<vspace />
+        (a) client software wishing to perform NAT64 address synthesis, and<vspace />
+        (b) the DNS64 server responding to such requests.<vspace />
+        These two considerations are listed in items 2 and 4 below:
+
+          <list style="numbers">
+            <t>Normal users should never have reason to encounter the ipv4only.arpa
+            domain name. If they do, queries for ipv4only.arpa should
+            result in the answers specified in RFC 7050.<vspace />
+            Normal users have no need to know that ipv4only.arpa is special.</t>
+
+            <t>Application software may explicitly use the name ipv4only.arpa for NAT64
+            address synthesis, and expect to get the answers specified in RFC 7050.
+            If application software encounters the name ipv4only.arpa in the normal
+            course of handling user input, the application software should resolve
+            that name as usual and need not treat it in any special way.</t>
+
+            <t>Name resolution APIs and libraries SHOULD NOT recognize
+            ipv4only.arpa as special and SHOULD NOT treat it differently.
+            Name resolution APIs SHOULD send queries for this name to
+            their configured recursive/caching DNS server(s).</t>
+
+<?rfc needLines="15" ?>
+            <t>Recursive/caching DNS servers SHOULD recognize ipv4only.arpa as special
+            and SHOULD NOT, by default, attempt to look up NS records for it, or
+            otherwise query authoritative DNS servers in an attempt to resolve this name.
+            Instead, recursive/caching DNS servers SHOULD, by default, act as
+            authoritative and generate immediate responses for all such queries.
+            <vspace blankLines="1" />
+            Traditional recursive/caching DNS servers that act as authoritative for this
+            name MUST generate only the 192.0.0.170 and 192.0.0.171 responses for these
+            queries, and no others.
+            <vspace blankLines="1" />
+            All DNS64 recursive/caching DNS servers MUST generate the
+            192.0.0.170 and 192.0.0.171 address record responses for these queries,
+            and MUST generate the appropriate synthesized IPv6 address record responses for all AAAA queries.
+            <vspace />
+            This local self-contained generation of these responses is
+            to avoid placing unnecessary load on the 'arpa' name servers.</t>
+
+            <t>Traditional authoritative DNS server software need not recognize
+            ipv4only.arpa as special or handle it in any special way.<vspace />
+            As a practical matter, only the administrators of the 'arpa' namespace
+            will configure their name servers to be authoritative for this name
+            and to generate the appropriate answers; all other authoritative
+            name servers will not be configured to know anything about this name
+            and will reject queries for it as they would reject queries for any
+            other name about which they have no information.</t>
+
+            <t>Generally speaking, operators of authoritative DNS servers need
+            not know anything about the name ipv4only.arpa, just as they don't need
+            to know anything about any other names they are not responsible for.
+            Operators of authoritative DNS servers who are configuring their name servers
+            to be authoritative for this name MUST understand that ipv4only.arpa is
+            a special name, with answers specified by Internet Standard
+            (generally this applies only to the administrators of the 'arpa' namespace).</t>
+
+            <t>DNS Registries/Registrars need not know anything about the
+            name ipv4only.arpa, just as they don't need to know
+            anything about any other name they are not responsible for.
+            Only the administrators of the 'arpa' namespace need to be aware
+            of this name's purpose and how it should be configured.</t>
+          </list>
+        </t>
+      </section>
+    </section>
+
+  </middle>
+
+  <back>
+    <?rfc needLines="8" ?>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119" ?>
+      <?rfc include="reference.RFC.6761" ?>
+      <?rfc include="reference.RFC.7050" ?>
+    </references>
+
+    <references title="Informative References">
+
+      <reference anchor="SUDN"
+      target="http://www.iana.org/assignments/special-use-domain-names/">
+        <front>
+          <title>Special-Use Domain Names Registry</title>
+          <author/>
+          <date/>
+        </front>
+      </reference>
+
+    </references>
+  </back>
+</rfc>

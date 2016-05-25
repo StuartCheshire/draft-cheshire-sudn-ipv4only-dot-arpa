@@ -171,7 +171,9 @@
         <t>When queried via a DNS64 recursive/caching server, the name
         'ipv4only.arpa' is defined to also have two IPv6 AAAA records,
         with rdata synthesized from a combination of the NAT64 IPv6 prefix,
-        and the IPv4 addresses 192.0.0.170 and 192.0.0.171.</t>
+        and the IPv4 addresses 192.0.0.170 and 192.0.0.171.
+        This can return more than one pair of IPv6 addresses
+        if there are multiple NAT64 prefixes.</t>
 
         <t>The name 'ipv4only.arpa' has no other DNS records of any type.</t>
 

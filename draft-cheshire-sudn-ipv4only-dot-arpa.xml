@@ -37,9 +37,9 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-02" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-03" ipr="trust200902" updates="7050">
   <front>
-    <title abbrev="Dot Home">Special Use Domain Name 'ipv4only.arpa'</title>
+    <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
     <author initials='S.' surname='Cheshire' fullname='Stuart Cheshire'>
       <organization>Apple Inc.</organization>
@@ -71,55 +71,100 @@
       </address>
     </author>
 
-    <date day='24' month='May' year='2016'/>
+    <date day='18' month='July' year='2016'/>
 
     <abstract>
-      <t>The document
-      "Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis" [RFC7050]
-      specifies the Special Use Domain Name 'ipv4only.arpa',
-      with certain precise special properties, but, perversely, the
-      Domain Name Reservation Considerations section [RFC6761]
-      in that document then goes on to deny the specialness of that name,
-      and (as of May 2016) the name 'ipv4only.arpa' does not appear
-      in the Special-Use Domain Names registry.</t>
+      <t>The specification for how a client discovers its network's NAT64
+      prefix [RFC7050] defines the special name 'ipv4only.arpa' for this purpose,
+      but then goes on immediately to disavow the specialness of that name in the
+      very same document's Domain Name Reservation Considerations section.</t>
 
-      <t>This document updates RFC 7050 with a more appropriate summary of
-      the legitimate and useful special properties of the name 'ipv4only.arpa',
-      and the corresponding reverse mapping names.</t>
+      <t>Consequently, despite the well articulated special purpose of the name,
+      as of July 2016 'ipv4only.arpa' still does not appear as one of the names with special
+      properties that are recorded in the Special-Use Domain Names registry.</t>
+
+      <t>This document rectifies that omission, formally declaring the actual
+      special properties of the name. This document also adds similar declarations
+      for the corresponding reverse mapping names.</t>
     </abstract>
   </front>
 
   <middle>
     <?rfc needLines="10" ?>
     <section title="Introduction">
-      <t>The document
-      <xref target="RFC7050">"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis"</xref>
-      specifies the Special Use Domain Name 'ipv4only.arpa',
-      with certain precise special properties, but, perversely, the
-      <xref target="RFC6761">Domain Name Reservation Considerations section</xref>
-      in that document denies the specialness of that name,
-      and (as of May 2016) the name 'ipv4only.arpa' does not appear
-      in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
+      <t>The specification for
+      <xref target="RFC7050">how a client discovers its network's NAT64 prefix</xref>
+      defines the special name 'ipv4only.arpa' for this purpose,
+      but then goes on immediately to disavow the specialness of that name in the
+      very same document's <xref target="RFC6761">Domain Name Reservation Considerations</xref> section.</t>
 
-      <t>As a result of the name 'ipv4only.arpa' being formally declared to have
-      no special properties, there was no mandate for software to treat this name
-      specially. Consequently, queries for this name have to be handled normally,
-      and result in a large volume of unnecessary queries to the 'arpa' name servers.</t>
+      <t>Consequently, despite the well articulated special purpose of the name,
+      as of July 2016 'ipv4only.arpa' still does not appear as one of the names with special
+      properties that are recorded in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
 
-      <t>Having millions of devices around the world issue these queries generates
-      pointless additional load on the 'arpa' name servers, which is completely
+      <t>This document rectifies that omission, formally declaring the actual
+      special properties of the name. This document also adds similar declarations
+      for the corresponding reverse mapping names.</t>
+    </section>
+
+    <section title="Specialness of 'ipv4only.arpa'">
+      <t>The hostname 'ipv4only.arpa' is peculiar in that it was never intended
+      to be treated like a normal hostname.</t>
+
+      <t>A typical client never looks up the IPv4 address records for 'ipv4only.arpa',
+      because it is already known, <xref target="RFC7050">by specification</xref>,
+      to have exactly two IPv4 address records, 192.0.0.170 and 192.0.0.171.
+      No client ever has to look the name in order to learn those two addresses.</t>
+
+      <t>In contrast, clients often look up the IPv6 AAAA address records for
+      'ipv4only.arpa', which on the face of it might seem a little odd, given
+      that it is already known, <xref target="RFC7050">by specification</xref>,
+      that no such IPv6 AAAA address records exist. And yet, clients expect to
+      receive, and do in fact receive, positive answers for these IPv6 AAAA
+      address records that are known to not exist.</t>
+
+      <t>This is clearly not a typical DNS name. Clients never normally query for
+      the two records that do in fact exist, instead querying for records that
+      are known to not exist, and getting positive answers to those bogus queries.
+      Clients are using DNS to perform queries for this name, but they are certainly not
+      using DNS to learn legitimate answers from the name's legitimate authoritative server.
+      Instead, clients are using these pseudo-DNS queries as an impromptu middlebox
+      communication protocol, to communicate with the
+      NAT64/DNS64 <xref target="RFC6146"/><xref target="RFC6147"/> gateway,
+      if present, and request that it disclose the prefix it is using for IPv6 address synthesis.</t>
+
+      <t>It is this use of specially-crafted DNS queries for 'ipv4only.arpa' as an
+      impromptu middlebox communication protocol that makes the name 'ipv4only.arpa'
+      noteworthy, and legitimately qualifying to be described as a 'special' name.</t>
+    </section>
+
+    <section title="Consequences of 'ipv4only.arpa' previously being unspecial">
+      <t>As a result of <xref target="RFC7050">the original specification</xref>
+      not formally declaring 'ipv4only.arpa' to have special properties,
+      there was no mandate for any software to treat this name
+      specially. Consequently, queries for this name had to be handled normally,
+      resulting in unnecessary queries to the authoritative 'arpa' name servers.</t>
+
+      <t>Having millions of devices around the world issue these queries generated
+      pointless additional load on the authoritative 'arpa' name servers, which was completely
       unnecessary when the name 'ipv4only.arpa' is defined, by Internet Standard,
-      to have only two IPv4 address records, 192.0.0.170 and 192.0.0.171,
+      to have exactly two IPv4 address records, 192.0.0.170 and 192.0.0.171,
       and no other records of any type.</t>
 
-      <t>At times, for reasons that are as yet
-      unclear, the 'arpa' name servers have been observed to be slow or unresponsive.
-      The failures of these 'ipv4only.arpa' queries result in unnecessary failures of
-      software that depends on them for NAT64 address synthesis.</t>
+      <t>Also, at times, for reasons that are as yet
+      unclear, the authoritative 'arpa' name servers were observed to be slow or unresponsive.
+      The failures of these 'ipv4only.arpa' queries resulted in unnecessary failures
+      of software that depended on them for <xref target="RFC6147">DNS64</xref> address synthesis.</t>
 
-      <t>To remedy this situation, this document updates RFC 7050 with a more appropriate
-      <xref target="RFC6761">Domain Name Reservation Considerations section</xref>
-      that properly lists the desirable and beneficial special handling for 'ipv4only.arpa'.</t>
+      <t>Even when the authoritative 'arpa' name servers are operating correctly,
+      having to perform an unnecessary query to obtain an answer that is already
+      known in advance adds precious milliseconds of delay for no reason.</t>
+
+      <t>This document updates <xref target="RFC7050">the previous specification</xref>
+      with a more appropriate
+      <xref target="RFC6761">Domain Name Reservation Considerations section</xref> that
+      accurately lists the actual special properties of the name 'ipv4only.arpa' so that
+      software can legitimately make appropriate performance and reliability optimizations.</t>
     </section>
 
     <section anchor="terminology" title="Conventions and Terminology Used in this Document">
@@ -131,12 +176,22 @@
 
     <?rfc needLines="7" ?>
     <section title="Security Considerations">
-      <t>Hard-coding the answers for 'ipv4only.arpa' queries avoids the risk of
+      <t>Hard-coding the known answers for 'ipv4only.arpa' queries avoids the risk of
       malicious devices intercepting those queries and returning incorrect answers.</t>
 
-      <t>DNSSEC signing issues for the 'ipv4only.arpa' address records don't apply, since
-      the only use of the 'ipv4only.arpa' name is to trigger synthesis of NAT64 AAAA
-      records, which aren't signed by arpa anyway.</t>
+      <t>One of the known problems with <xref target="RFC6147">DNS64</xref> is that
+      it interferes with DNSSEC. DNSSEC may cryptographically assert that a name
+      has no IPv6 AAAA records, while at the same time DNS64 address synthesis
+      is contradicting this and claiming that IPv6 AAAA records do exist.
+      This problem can be mitigated by having the client
+      (i) query for the (signed) IPv4 address records itself,
+      (ii) interrogate the local NAT64/DNS64 gateway with an 'ipv4only.arpa' query to learn
+      the IPv6 address synthesis prefix, and then
+      (iii) perform its own IPv6 address synthesis locally using the DNSSEC-signed data.
+      This approach is more attractive if it doesn't create an additional
+      dependency on the authoritative 'arpa' name servers to answer a
+      pointless query that is unnecessary because the NAT64/DNS64 gateway
+      should already know the answer before it even issues the query.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -146,9 +201,9 @@
       <t>IANA has recorded the following names in the<vspace />
       <xref target="SUDN">Special-Use Domain Names registry</xref>:
         <list style='empty'>
-          <t>ipv4only.arpa</t>
-          <t>170.0.0.192.in-addr.arpa</t>
-          <t>171.0.0.192.in-addr.arpa</t>
+          <t>ipv4only.arpa.</t>
+          <t>170.0.0.192.in-addr.arpa.</t>
+          <t>171.0.0.192.in-addr.arpa.</t>
         </list>
       </t>
 
@@ -168,9 +223,9 @@
         <t>The name 'ipv4only.arpa' is defined, by Internet Standard, to have
         two IPv4 address records with rdata 192.0.0.170 and 192.0.0.171.</t>
 
-        <t>When queried via a DNS64 recursive/caching server, the name
-        'ipv4only.arpa' is defined to also have two IPv6 AAAA records,
-        with rdata synthesized from a combination of the NAT64 IPv6 prefix,
+        <t>When queried via a <xref target="RFC6147">DNS64</xref> recursive/caching server, the name
+        'ipv4only.arpa' is also defined to have IPv6 AAAA records,
+        with rdata synthesized from a combination of the NAT64 IPv6 prefix(es),
         and the IPv4 addresses 192.0.0.170 and 192.0.0.171.
         This can return more than one pair of IPv6 addresses
         if there are multiple NAT64 prefixes.</t>
@@ -178,18 +233,19 @@
         <t>The name 'ipv4only.arpa' has no other DNS records of any type.</t>
 
         <t>The name 'ipv4only.arpa' is special only to<vspace />
-        (a) client software wishing to perform NAT64 address synthesis, and<vspace />
-        (b) the DNS64 server responding to such requests.<vspace />
+        (a) client software wishing to perform DNS64 address synthesis, and<vspace />
+        (b) the DNS64 recursive/caching server responding to such requests.<vspace />
         These two considerations are listed in items 2 and 4 below:
 
           <list style="numbers">
-            <t>Normal users should never have reason to encounter the 'ipv4only.arpa'
-            domain name. If they do, queries for 'ipv4only.arpa' should
-            result in the answers specified in RFC 7050.<vspace />
+            <t>Normal users should never have reason to encounter the 'ipv4only.arpa' domain name.
+            If they do, they should expect queries for 'ipv4only.arpa' to result in
+            <xref target="RFC7050">the answers required by the specification</xref>.
             Normal users have no need to know that 'ipv4only.arpa' is special.</t>
 
-            <t>Application software may explicitly use the name 'ipv4only.arpa' for NAT64
-            address synthesis, and expect to get the answers specified in RFC 7050.
+            <t>Application software may explicitly use the name 'ipv4only.arpa' for NAT64/DNS64
+            address synthesis, and expect to get
+            <xref target="RFC7050">the answers required by the specification</xref>.
             If application software encounters the name 'ipv4only.arpa' in the normal
             course of handling user input, the application software should resolve
             that name as usual and need not treat it in any special way.</t>
@@ -199,7 +255,7 @@
             Name resolution APIs SHOULD send queries for this name to
             their configured recursive/caching DNS server(s).</t>
 
-<?rfc needLines="15" ?>
+<?rfc needLines="5" ?>
             <t>Recursive/caching DNS servers SHOULD recognize 'ipv4only.arpa' as special
             and SHOULD NOT, by default, attempt to look up NS records for it, or
             otherwise query authoritative DNS servers in an attempt to resolve this name.
@@ -210,8 +266,6 @@
             name MUST generate only the 192.0.0.170 and 192.0.0.171 responses for
             IPv4 address queries (DNS qtype "A"),
             and a "no&nbsp;error&nbsp;no&nbsp;answer" response for all other query types.
-            An example configuration for BIND 9 to achieve this result is given in
-            <xref target="app-a" format="none">Appendix A</xref>.
             
             <vspace blankLines="1" />
             All DNS64 recursive/caching DNS servers MUST generate
@@ -220,12 +274,19 @@
             and a "no&nbsp;error&nbsp;no&nbsp;answer" response for all other query types.
             <vspace />
             This local self-contained generation of these responses is
-            to avoid placing unnecessary load on the 'arpa' name servers.</t>
+            to avoid placing unnecessary load on the authoritative 'arpa' name servers.
+            <vspace blankLines="1" />
+            
+            Example configurations for BIND 9 showing how to achieve these results
+            are given in <xref target="app-a" format="none">Appendix A</xref>.</t>
 
             <t>Traditional authoritative DNS server software need not recognize
             'ipv4only.arpa' as special or handle it in any special way.<vspace />
-            As a practical matter, only the administrators of the 'arpa' namespace
-            will configure their name servers to be authoritative for this name
+            Recursive/caching DNS servers SHOULD routinely act as
+            authoritative for this name and return the results described
+            above. Only the administrators of the 'arpa' namespace need to
+            explicitly configure their actual authoritative name servers to be
+            authoritative for this name
             and to generate the appropriate answers; all other authoritative
             name servers will not be configured to know anything about this name
             and will reject queries for it as they would reject queries for any
@@ -236,7 +297,7 @@
             to know anything about any other names they are not responsible for.
             Operators of authoritative DNS servers who are configuring their name servers
             to be authoritative for this name MUST understand that 'ipv4only.arpa' is
-            a special name, with answers specified by Internet Standard
+            a special name, with records rigidly specified by Internet Standard
             (generally this applies only to the administrators of the 'arpa' namespace).</t>
 
             <t>DNS Registries/Registrars need not know anything about the
@@ -248,6 +309,7 @@
         </t>
       </section>
 
+<?rfc needLines="7" ?>
       <section title="170.0.0.192.in-addr.arpa and 171.0.0.192.in-addr.arpa">
         <t>Since the IPv4 addresses 192.0.0.170 and 192.0.0.171 are defined
         to be special, and are listed in the
@@ -263,7 +325,7 @@
 
         <t>Practically speaking these two names are rarely used, but to the extent that
         they may be, they are special only to recursive/caching DNS servers as
-        described in item 3 below:
+        described in item 4 below:
 
           <list style="numbers">
             <t>Normal users should never have reason to encounter these two reverse mapping names.
@@ -293,7 +355,7 @@
             names MUST generate only the 'ipv4only.arpa' response for PTR queries,
             and a "no&nbsp;error&nbsp;no&nbsp;answer" response for all other query types.
             This local self-contained generation of these responses is to avoid
-            placing unnecessary load on the 'in&nbhy;addr.arpa' name servers.</t>
+            placing unnecessary load on the authoritative 'in&nbhy;addr.arpa' name servers.</t>
 
             <t>Traditional authoritative DNS server software need not
             recognize these two reverse mapping names as special or
@@ -351,6 +413,8 @@
     <?rfc needLines="8" ?>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119" ?>
+      <?rfc include="reference.RFC.6146" ?>
+      <?rfc include="reference.RFC.6147" ?>
       <?rfc include="reference.RFC.6761" ?>
       <?rfc include="reference.RFC.7050" ?>
     </references>
@@ -391,7 +455,9 @@
       </artwork></figure></t>
 
       <t><vspace blankLines="1" />
-      The file /var/named/ipv4only is created with the following content:
+      The file /var/named/ipv4only is created with the following content.
+      (The lines marked "Only for DNS64 server" are omitted on a standard
+      recursive/caching DNS server.)
       <figure><artwork>
  $TTL 86400               ; Default TTL 24 hours
  @ IN SOA nameserver.example. admin.nameserver.example. (
@@ -403,8 +469,10 @@
           )
  @ IN NS  nameserver.example.
 
- @ IN A   192.0.0.170
- @ IN A   192.0.0.171
+ @ IN A     192.0.0.170
+ @ IN A     192.0.0.171
+ @ IN AAAA  64:ff9b::192.0.0.170 ; Only for DNS64 server
+ @ IN AAAA  64:ff9b::192.0.0.171 ; Only for DNS64 server
       </artwork></figure></t>
 
       <t><vspace blankLines="1" />

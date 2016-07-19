@@ -123,6 +123,7 @@
       receive, and do in fact receive, positive answers for these IPv6 AAAA
       address records that are known to not exist.</t>
 
+      <?rfc needLines="3" ?>
       <t>This is clearly not a typical DNS name. Clients never normally query for
       the two records that do in fact exist, instead querying for records that
       are known to not exist, and getting positive answers to those bogus queries.
@@ -152,46 +153,69 @@
       and no other records of any type.</t>
 
       <t>Also, at times, for reasons that are as yet
-      unclear, the authoritative 'arpa' name servers were observed to be slow or unresponsive.
-      The failures of these 'ipv4only.arpa' queries resulted in unnecessary failures
-      of software that depended on them for <xref target="RFC6147">DNS64</xref> address synthesis.</t>
+      unclear, the authoritative 'arpa' name servers have been observed to be slow or unresponsive.
+      The failures of these 'ipv4only.arpa' queries result in unnecessary failures
+      of software that depends on them for <xref target="RFC6147">DNS64</xref> address synthesis.</t>
 
       <t>Even when the authoritative 'arpa' name servers are operating correctly,
       having to perform an unnecessary query to obtain an answer that is already
       known in advance adds precious milliseconds of delay for no reason.</t>
 
-      <t>This document updates <xref target="RFC7050">the previous specification</xref>
+      <t>This document updates <xref target="RFC7050">the earlier specification</xref>
       with a more appropriate
       <xref target="RFC6761">Domain Name Reservation Considerations section</xref> that
       accurately lists the actual special properties of the name 'ipv4only.arpa' so that
       software can legitimately make appropriate performance and reliability optimizations.</t>
     </section>
 
-    <section anchor="terminology" title="Conventions and Terminology Used in this Document">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL"
-      in this document are to be interpreted as described in "Key words for use
-      in RFCs to Indicate Requirement Levels" <xref target="RFC2119"/>.</t>
-    </section>
-
     <?rfc needLines="7" ?>
     <section title="Security Considerations">
-      <t>Hard-coding the known answers for 'ipv4only.arpa' queries avoids the risk of
-      malicious devices intercepting those queries and returning incorrect answers.</t>
+      <t>Hard-coding the known answers for 'ipv4only.arpa' queries in
+      recursive/caching DNS servers reduces the risk of malicious devices
+      intercepting those queries and returning incorrect answers, particularly in the
+      case of recursive/caching DNS servers that do not perform DNSSEC validation.</t>
 
-      <t>One of the known problems with <xref target="RFC6147">DNS64</xref> is that
+      <t>One of the known concerns with <xref target="RFC6147">DNS64</xref> is that
       it interferes with DNSSEC. DNSSEC may cryptographically assert that a name
       has no IPv6 AAAA records, while at the same time DNS64 address synthesis
-      is contradicting this and claiming that IPv6 AAAA records do exist.
-      This problem can be mitigated by having the client
-      (i) query for the (signed) IPv4 address records itself,
-      (ii) interrogate the local NAT64/DNS64 gateway with an 'ipv4only.arpa' query to learn
-      the IPv6 address synthesis prefix, and then
-      (iii) perform its own IPv6 address synthesis locally using the DNSSEC-signed data.
-      This approach is more attractive if it doesn't create an additional
-      dependency on the authoritative 'arpa' name servers to answer a
-      pointless query that is unnecessary because the NAT64/DNS64 gateway
-      should already know the answer before it even issues the query.</t>
+      is contradicting this and claiming that IPv6 AAAA records do exist.</t>
+
+      <t>Section 3 of the <xref target="RFC6147">DNS64 specification</xref>
+      discusses this:
+<figure><artwork>
+   ... DNS64 receives a query with the DO bit set and
+   the CD bit set. In this case, the DNS64 is supposed
+   to pass on all the data it gets to the query initiator.
+   This case will not work with DNS64, unless the
+   validating resolver is prepared to do DNS64 itself.</artwork></figure></t>
+
+      <t>The <xref target="RFC7050">NAT64 Prefix Discovery specification</xref>
+      provides the mechanism for the query initiator to learn the NAT64 prefix
+      so that it can do its own validation and DNS64 synthesis as described above.
+      With this mechanism the client
+      (i) interrogates the local NAT64/DNS64 gateway with an 'ipv4only.arpa'
+      query to learn the IPv6 address synthesis prefix,
+      (i) queries for the (signed) IPv4 address records itself, and then
+      (iii) performs its own IPv6 address synthesis locally,
+      combining the IPv6 address synthesis prefix learned from the local NAT64/DNS64 gateway
+      with the secure DNSSEC-signed data learned from the global Domain Name System.</t>
+
+      <t>It is conceivable that over time, if DNSSEC is successful, the
+      majority of clients could move to this validate-and-synthesize-locally
+      model, which reduces the DNS64 machinery to the vestigial role of
+      simply responding to the 'ipv4only.arpa' query to report the local
+      IPv6 address synthesis prefix. In no case does the client care what
+      answer(s) the authoritative 'arpa' name servers might give for that query.
+      The 'ipv4only.arpa' query is being used purely as a local
+      client-to-middlebox communication message.</t>
+
+      <t>This approach is even more attractive if it doesn't create
+      an additional dependency on the authoritative 'arpa' name
+      servers to answer a pointless query that is unnecessary
+      because the NAT64/DNS64 gateway already knows the answer
+      before it even issues the query. Avoiding this unnecessary
+      query improves performance and reliability for the client,
+      and reduces unnecessary load for the authoritative 'arpa' name servers.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -219,6 +243,14 @@
 
 <?rfc needLines="25" ?>
     <section title="Domain Name Reservation Considerations">
+
+      <section anchor="terminology" title="Conventions and Terminology Used in this Section">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL"
+        in this document are to be interpreted as described in "Key words for use
+        in RFCs to Indicate Requirement Levels" <xref target="RFC2119"/>.</t>
+      </section>
+
       <section title="ipv4only.arpa">
         <t>The name 'ipv4only.arpa' is defined, by Internet Standard, to have
         two IPv4 address records with rdata 192.0.0.170 and 192.0.0.171.</t>
@@ -410,7 +442,7 @@
   </middle>
 
   <back>
-    <?rfc needLines="8" ?>
+    <?rfc needLines="38" ?>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119" ?>
       <?rfc include="reference.RFC.6146" ?>
@@ -451,8 +483,7 @@
       <figure><artwork>
  zone "ipv4only.arpa"            { type master; file "ipv4only"; };
  zone "170.0.0.192.in-addr.arpa" { type master; file "ipv4only-r"; };
- zone "171.0.0.192.in-addr.arpa" { type master; file "ipv4only-r"; };
-      </artwork></figure></t>
+ zone "171.0.0.192.in-addr.arpa" { type master; file "ipv4only-r"; };</artwork></figure></t>
 
       <t><vspace blankLines="1" />
       The file /var/named/ipv4only is created with the following content.
@@ -472,8 +503,7 @@
  @ IN A     192.0.0.170
  @ IN A     192.0.0.171
  @ IN AAAA  64:ff9b::192.0.0.170 ; Only for DNS64 server
- @ IN AAAA  64:ff9b::192.0.0.171 ; Only for DNS64 server
-      </artwork></figure></t>
+ @ IN AAAA  64:ff9b::192.0.0.171 ; Only for DNS64 server</artwork></figure></t>
 
       <t><vspace blankLines="1" />
       The file /var/named/ipv4only-r is created with the following content:
@@ -488,8 +518,7 @@
           )
  @ IN NS  nameserver.example.
 
- @ IN PTR ipv4only.arpa.
-      </artwork></figure></t>
+ @ IN PTR ipv4only.arpa.</artwork></figure></t>
 
     </section>
 

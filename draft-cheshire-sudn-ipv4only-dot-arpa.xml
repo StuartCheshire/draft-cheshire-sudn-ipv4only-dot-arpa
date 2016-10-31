@@ -440,12 +440,25 @@
 
           <t>In the case of synthesized IPv6 addresses corresponding
           to the IPv4 addresses 192.0.0.170 and 192.0.0.171,
-          the DNS64 recursive/caching server does not issue mapping queries
+          the DNS64 recursive/caching server does not issue reverse mapping queries
           for those IPv4 addresses, but instead, according to rule 3 above,
           immediately returns the answer 'ipv4only.arpa'.</t>
         </section>
 
       </section>
+
+   <section anchor="Acknowledgements" title="Acknowledgements">
+     <t>Thanks to Jouni Korhonen, Teemu Savolainen, and Dan Wing, for devising
+     the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>,
+     and for their feedback on this document.
+
+     Thanks to Erik Kline for pointing out that the in-addr.arpa names are special too.
+
+     Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
+     IETF 96 in Berlin, which lead directly to significant improvements in how this
+     document explained the issues.</t>
+   </section>
+
   </middle>
 
   <back>

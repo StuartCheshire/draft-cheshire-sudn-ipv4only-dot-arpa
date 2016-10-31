@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-04" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-05" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -71,7 +71,7 @@
       </address>
     </author>
 
-    <date day='30' month='October' year='2016'/>
+    <date day='31' month='October' year='2016'/>
 
     <abstract>
       <t>The specification for how a client discovers its network's NAT64
@@ -287,10 +287,12 @@
             course of handling user input, the application software should resolve
             that name as usual and need not treat it in any special way.</t>
 
-            <t>Name resolution APIs and libraries SHOULD NOT recognize
-            'ipv4only.arpa' as special and SHOULD NOT treat it differently.
-            Name resolution APIs SHOULD send queries for this name to
-            their configured recursive/caching DNS server(s).</t>
+            <t>Name resolution APIs and libraries MUST NOT recognize
+            'ipv4only.arpa' as special and MUST NOT treat it differently.
+            Name resolution APIs MUST treat this name just as they would any other normal DNS name,
+            and send queries for it to their configured recursive/caching DNS server(s).<vspace />
+            Failure to honor this requirement would cause failure of<vspace />
+            the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>.</t>
 
 <?rfc needLines="5" ?>
             <t>Recursive/caching DNS servers SHOULD recognize 'ipv4only.arpa' as special
@@ -299,6 +301,7 @@
             Instead, recursive/caching DNS servers SHOULD, by default, act as
             authoritative and generate immediate responses for all such queries.
             <vspace blankLines="1" />
+<?rfc needLines="5" ?>
             Traditional recursive/caching DNS servers that act as authoritative for this
             name MUST generate only the 192.0.0.170 and 192.0.0.171 responses for
             IPv4 address queries (DNS&nbsp;qtype&nbsp;"A"),
@@ -376,10 +379,10 @@
             then the "host" command should issue the query as usual and display the
             result that is returned.</t>
 
-            <t>Name resolution APIs and libraries SHOULD NOT recognize
-            these two reverse mapping names as special and SHOULD NOT treat them differently.
-            Name resolution APIs SHOULD send queries for these names to
-            their configured recursive/caching DNS server(s).</t>
+            <t>Name resolution APIs and libraries MUST NOT recognize
+            these two reverse mapping names as special and MUST NOT treat them differently.
+            Name resolution APIs MUST treat these names just as they would any other normal DNS name,
+            and send queries for them to their configured recursive/caching DNS server(s).</t>
 
 <?rfc needLines="12" ?>
             <t>Recursive/caching DNS servers SHOULD recognize these two reverse mapping
@@ -387,11 +390,10 @@
             for them, or otherwise query authoritative DNS servers in an attempt to
             resolve them. Instead, recursive/caching DNS servers SHOULD, by default,
             act as authoritative and generate immediate responses for all such queries.
-            <vspace blankLines="1" />
-            Recursive/caching DNS servers that act as authoritative for these
-            names MUST generate only the 'ipv4only.arpa' response for PTR queries,
-            and a negative ("no&nbsp;error&nbsp;no&nbsp;answer") response for all other query types.
-            This local self-contained generation of these responses is to avoid
+            Recursive/caching DNS servers that do this
+            MUST generate only the 'ipv4only.arpa' response for PTR queries,
+            and a negative ("no error no answer") response for all other query types.
+            This local generation of these responses is to avoid
             placing unnecessary load on the authoritative 'in&nbhy;addr.arpa' name servers.</t>
 
             <t>Traditional authoritative DNS server software need not

@@ -71,7 +71,7 @@
       </address>
     </author>
 
-    <date day='31' month='October' year='2016'/>
+    <date day='15' month='November' year='2016'/>
 
     <abstract>
       <t>The specification for how a client discovers its network's NAT64
@@ -80,7 +80,7 @@
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
-      as of July 2016 'ipv4only.arpa' still does not appear as one of the names with special
+      as of November 2016 'ipv4only.arpa' still does not appear as one of the names with special
       properties that are recorded in the Special-Use Domain Names registry.</t>
 
       <t>This document formally declares the actual
@@ -99,7 +99,7 @@
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
-      as of July 2016 'ipv4only.arpa' still does not appear as one of the names with special
+      as of November 2016 'ipv4only.arpa' still does not appear as one of the names with special
       properties that are recorded in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
 
       <t>This document formally declares the actual
@@ -255,7 +255,6 @@
         in RFCs to Indicate Requirement Levels" <xref target="RFC2119"/>.</t>
       </section>
 
-<?rfc needLines="35" ?>
       <section title="ipv4only.arpa">
         <t>The name 'ipv4only.arpa' is defined, by Internet Standard, to have
         two IPv4 address records with rdata 192.0.0.170 and 192.0.0.171.</t>
@@ -267,7 +266,9 @@
         This can return more than one pair of IPv6 addresses
         if there are multiple NAT64 prefixes.</t>
 
-        <t>The name 'ipv4only.arpa' has no other DNS records of any type.</t>
+        <t>The name 'ipv4only.arpa' has no other DNS records of any type.<vspace />
+        There are no subdomains of ipv4only.arpa. All names falling below
+        'ipv4only.arpa' are defined to be nonexistent (NXDOMAIN).</t>
 
         <t>The name 'ipv4only.arpa' is special only to<vspace />
         (a) client software wishing to perform DNS64 address synthesis, and<vspace />
@@ -306,17 +307,19 @@
             name MUST generate only the 192.0.0.170 and 192.0.0.171 responses for
             IPv4 address queries (DNS&nbsp;qtype&nbsp;"A"),
             and a negative ("no&nbsp;error&nbsp;no&nbsp;answer") response for all other query types.
-
             <vspace blankLines="1" />
             All DNS64 recursive/caching DNS servers MUST generate
             the 192.0.0.170 and 192.0.0.171 responses for IPv4 address queries (DNS qtype "A"),
             the appropriate synthesized IPv6 address record responses for IPv6 address queries (DNS qtype "AAAA"),
             and a negative ("no&nbsp;error&nbsp;no&nbsp;answer") response for all other query types.
             <vspace blankLines="1" />
-            This local self-contained generation of these responses is
-            to avoid placing unnecessary load on the authoritative 'arpa' name servers.
+            For all subdomains of 'ipv4only.arpa', recursive/caching DNS servers
+            SHOULD generate immediate NXDOMAIN responses.
+            All names falling below 'ipv4only.arpa' are defined to be nonexistent.
             <vspace blankLines="1" />
-
+            This local self-contained generation of these responses is to avoid
+            placing unnecessary load on the authoritative 'arpa' name servers.
+            <vspace blankLines="1" />
             Example configurations for BIND 9 showing how to achieve these results
             are given in <xref target="app-a" format="none">Appendix A</xref>.</t>
 
@@ -363,6 +366,9 @@
         <t>The name '171.0.0.192.in-addr.arpa' is defined, by Internet Standard,
         to have only a single DNS record, type PTR, with rdata 'ipv4only.arpa'.</t>
 
+        <t>There are no subdomains of '170.0.0.192.in-addr.arpa' or '171.0.0.192.in-addr.arpa'.
+        All names falling below these names are defined to be nonexistent (NXDOMAIN).</t>
+
         <t>Practically speaking these two names are rarely used, but to the extent that
         they may be, they are special only to recursive/caching DNS servers as
         described in item 4 below:
@@ -392,8 +398,13 @@
             act as authoritative and generate immediate responses for all such queries.
             Recursive/caching DNS servers that do this
             MUST generate only the 'ipv4only.arpa' response for PTR queries,
-            and a negative ("no error no answer") response for all other query types.
-            This local generation of these responses is to avoid
+            and a negative ("no&nbsp;error&nbsp;no&nbsp;answer") response for all other query types.
+            <vspace blankLines="1" />
+            For all subdomains of these two reverse mapping domains, recursive/caching
+            DNS servers SHOULD generate immediate NXDOMAIN responses. All names falling
+            below these two reverse mapping domains are defined to be nonexistent.
+            <vspace blankLines="1" />
+            This local self-contained generation of these responses is to avoid
             placing unnecessary load on the authoritative 'in&nbhy;addr.arpa' name servers.</t>
 
             <t>Traditional authoritative DNS server software need not
@@ -421,7 +432,6 @@
             to be aware of the purpose of these two names.</t>
           </list>
         </t>
-      </section>
 
         <section title="ip6.arpa Reverse Mapping PTR Records">
           <t>For all IPv6 addresses synthesized by the NAT64 gateway,
@@ -444,20 +454,20 @@
           for those IPv4 addresses, but instead, according to rule 3 above,
           immediately returns the answer 'ipv4only.arpa'.</t>
         </section>
-
       </section>
+    </section>
 
-   <section anchor="Acknowledgements" title="Acknowledgements">
-     <t>Thanks to Jouni Korhonen, Teemu Savolainen, and Dan Wing, for devising
-     the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>,
-     and for their feedback on this document.
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>Thanks to Jouni Korhonen, Teemu Savolainen, and Dan Wing, for devising
+      the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>,
+      and for their feedback on this document.
 
-     Thanks to Erik Kline for pointing out that the in-addr.arpa names are special too.
+      Thanks to Erik Kline for pointing out that the in-addr.arpa names are special too.
 
-     Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
-     IETF 96 in Berlin, which lead directly to significant improvements in how this
-     document explained the issues.</t>
-   </section>
+      Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
+      IETF 96 in Berlin, which lead directly to significant improvements in how this
+      document presents the issues.</t>
+    </section>
 
   </middle>
 

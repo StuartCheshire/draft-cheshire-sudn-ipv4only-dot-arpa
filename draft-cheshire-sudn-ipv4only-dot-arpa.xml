@@ -105,9 +105,9 @@
       <t>This document formally declares the actual
       special properties of the name. This document also adds similar declarations
       for the corresponding reverse mapping names.</t>
+    <?rfc needLines="24" ?>
     </section>
 
-    <?rfc needLines="23" ?>
     <section title="Specialness of 'ipv4only.arpa'">
       <t>The hostname 'ipv4only.arpa' is peculiar in that it was never intended
       to be treated like a normal hostname.</t>
@@ -140,9 +140,9 @@
       most definitely a special name, and one that should, in the spirit
       of openness and honesty, be listed in IANA's registry along with
       <xref target="SUDN">other DNS names that have special uses</xref>.</t>
+    <?rfc needLines="14" ?>
     </section>
 
-    <?rfc needLines="14" ?>
     <section title="Consequences of 'ipv4only.arpa' previously being declared unspecial">
       <t>As a result of <xref target="RFC7050">the original specification</xref>
       not formally declaring 'ipv4only.arpa' to have special properties,
@@ -171,9 +171,9 @@
       with one that
       accurately lists the actual special properties of the name 'ipv4only.arpa' so that
       software can legitimately make appropriate performance and reliability optimizations.</t>
+    <?rfc needLines="16" ?>
     </section>
 
-    <?rfc needLines="16" ?>
     <section title="Security Considerations">
       <t>Hard-coding the known answers for 'ipv4only.arpa' queries in
       recursive/caching DNS servers reduces the risk of malicious devices
@@ -270,6 +270,7 @@
         There are no subdomains of ipv4only.arpa. All names falling below
         'ipv4only.arpa' are defined to be nonexistent (NXDOMAIN).</t>
 
+    <?rfc needLines="10" ?>
         <t>The name 'ipv4only.arpa' is special only to<vspace />
         (a) client software wishing to perform DNS64 address synthesis, and<vspace />
         (b) the DNS64 recursive/caching server responding to such requests.<vspace />
@@ -302,7 +303,6 @@
             Instead, recursive/caching DNS servers SHOULD, by default, act as
             authoritative and generate immediate responses for all such queries.
             <vspace blankLines="1" />
-<?rfc needLines="5" ?>
             Traditional recursive/caching DNS servers that act as authoritative for this
             name MUST generate only the 192.0.0.170 and 192.0.0.171 responses for
             IPv4 address queries (DNS&nbsp;qtype&nbsp;"A"),
@@ -508,14 +508,14 @@
       <t>A BIND 9 recursive/caching DNS server could be configured to
       act as authoritative for the appropriate names as follows.</t>
 
-      <t><vspace blankLines="1" />
+      <t><vspace blankLines="2" />
       In /etc/named.conf the following lines are added:
       <figure><artwork>
  zone "ipv4only.arpa"            { type master; file "ipv4only"; };
  zone "170.0.0.192.in-addr.arpa" { type master; file "ipv4only-r"; };
  zone "171.0.0.192.in-addr.arpa" { type master; file "ipv4only-r"; };</artwork></figure></t>
 
-      <t><vspace blankLines="1" />
+      <t><vspace blankLines="2" />
       The file /var/named/ipv4only is created with the following content.
       (The lines marked "Only for DNS64 server" are omitted on a standard
       recursive/caching DNS server.)
@@ -535,7 +535,7 @@
  @ IN AAAA  64:ff9b::192.0.0.170 ; Only for DNS64 server
  @ IN AAAA  64:ff9b::192.0.0.171 ; Only for DNS64 server</artwork></figure></t>
 
-      <t><vspace blankLines="1" />
+      <t><vspace blankLines="2" />
       The file /var/named/ipv4only-r is created with the following content:
       <figure><artwork>
  $TTL 86400               ; Default TTL 24 hours

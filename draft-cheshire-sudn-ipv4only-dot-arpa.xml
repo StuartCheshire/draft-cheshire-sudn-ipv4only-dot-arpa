@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-06" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-07" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -71,7 +71,7 @@
       </address>
     </author>
 
-    <date day='15' month='November' year='2016'/>
+    <date day='22' month='May' year='2017'/>
 
     <abstract>
       <t>The specification for how a client discovers its network's NAT64
@@ -80,8 +80,8 @@
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
-      as of November 2016 'ipv4only.arpa' still does not appear as one of the names with special
-      properties that are recorded in the Special-Use Domain Names registry.</t>
+      (at the time of writing) 'ipv4only.arpa' still does not appear as one of the names with special
+      properties recorded in the Special-Use Domain Names registry.</t>
 
       <t>This document formally declares the actual
       special properties of the name, and adds similar declarations
@@ -99,8 +99,8 @@
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
-      as of November 2016 'ipv4only.arpa' still does not appear as one of the names with special
-      properties that are recorded in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
+      (at the time of writing) 'ipv4only.arpa' still does not appear as one of the names with special
+      properties recorded in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
 
       <t>This document formally declares the actual
       special properties of the name. This document also adds similar declarations
@@ -146,7 +146,7 @@
     <section title="Consequences of 'ipv4only.arpa' previously being declared unspecial">
       <t>As a result of <xref target="RFC7050">the original specification</xref>
       not formally declaring 'ipv4only.arpa' to have special properties,
-      there was no mandate for any server software to treat this name
+      there was no mandate for any DNS software to treat this name
       specially. Consequently, queries for this name had to be handled normally,
       resulting in unnecessary queries to the authoritative 'arpa' name servers.</t>
 
@@ -434,18 +434,18 @@
         </t>
 
         <section title="ip6.arpa Reverse Mapping PTR Records">
-          <t>For all IPv6 addresses synthesized by the NAT64 gateway,
-          the DNS64 recursive/caching server is responsible for
-          synthesizing the appropriate ip6.arpa reverse mapping PTR records,
-          if it chooses to do so.
+          <t>For all IPv6 addresses synthesized by a DNS64 recursive resolver,
+          the DNS64 recursive resolver server is responsible for
+          synthesizing the appropriate 'ip6.arpa' reverse mapping PTR records too,
+          if it chooses to provide reverse mapping PTR records.
           The same applies to the synthesized IPv6 addresses corresponding
           to the IPv4 addresses 192.0.0.170 and 192.0.0.171.</t>
 
           <t>Generally a DNS64 recursive/caching server synthesizes
-          appropriate ip6.arpa reverse mapping PTR records by extracting
+          appropriate 'ip6.arpa' reverse mapping PTR records by extracting
           the embedded IPv4 address from the encoded IPv6 address,
-          performing a reverse mapping query for that IPv4 address,
-          and then synthesizing a corresponding ip6.arpa reverse mapping
+          performing a reverse mapping PTR query for that IPv4 address,
+          and then synthesizing a corresponding 'ip6.arpa' reverse mapping
           PTR record containing the same rdata.</t>
 
           <t>In the case of synthesized IPv6 addresses corresponding

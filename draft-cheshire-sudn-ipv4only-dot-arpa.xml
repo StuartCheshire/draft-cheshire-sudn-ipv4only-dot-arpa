@@ -137,8 +137,8 @@
 
       <t>It is this use of specially-crafted DNS queries as an impromptu
       client-to-middlebox communication protocol that makes the name 'ipv4only.arpa'
-      most definitely a special name, and one that should, in the spirit
-      of openness and honesty, be listed in IANA's registry along with
+      most definitely a special name, and one that should
+      be listed in IANA's registry along with
       <xref target="SUDN">other DNS names that have special uses</xref>.</t>
     <?rfc needLines="14" ?>
     </section>
@@ -168,8 +168,8 @@
       <t>A more serious problem occurs when a device is configured to use a recursive/caching DNS
       server other than the one it learned from the network. Typically a device joining a NAT64
       network will learn the recursive/caching DNS server recommended for that network either
-      via DHCPv6 <xref target="RFC3315"/><xref target="RFC3646"/><xref target="RFC3736"/>
-      or via the newer IPv6 Router Advertisement Options for DNS Configuration <xref target="RFC6106"/>.
+      via <xref target="RFC6106">IPv6 Router Advertisement Options for DNS Configuration</xref>
+      or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
       On a NAT64 network it is essential that the client use the recursive/caching
       DNS64 server recommended for that network, since only that DNS64 server can
       be relied upon to know the appropriate prefix(es) to use for synthesizing IPv6
@@ -180,13 +180,14 @@
       resolver on the Internet, perhaps because they perceive their preferred
       recursive resolver to be faster, more reliable, or more trustworthy.</t>
 
-      <t>Another common scenario is use of VPN client software, which overrides the
+      <t>Another common scenario is the use of corporate VPN client software, which overrides the
       default configuration to divert DNS requests to the company's own private internal
       recursive resolver, because the local network's recursive resolver will typically
       be unable to provide answers for the company's private internal host names.
-      However, by a similar token, it's not safe to assume that the company's
+      However, it is not safe to assume that the company's
       private internal recursive resolver will be able to synthesize IPv6
-      addresses correctly for use with the local network's NAT64 server.
+      addresses correctly for use with the local network's NAT64 server,
+      as it is unlikely to be aware of the NAT64 prefix in use on the local network.
       It is clear that a single recursive resolver cannot meet both needs.
       The local network's recursive resolver cannot give answers for some
       company's private internal host names, and some company's private internal
@@ -197,20 +198,13 @@
       The first purpose is retrieving data from a (nominally) global database --
       generally retrieving the IP address(es) associated with a hostname.
       The second purpose is using the DNS protocol as a middlebox communication
-      protocol in disguise, to interrogate the local network infrastructure to discover
+      protocol, to interrogate the local network infrastructure to discover
       the IPv6 prefix(es) in use by the local NAT64 gateway for address synthesis.</t>
 
       <t>(Possibly this problem could be solved if we could force all
       NAT64 gateways to use the same Well-Known Prefix for IPv6 address
-      synthesis <xref target="RFC6052"/>, but this is circular reasoning.
-      This document only exists to elaborate on the specification of the special
-      'ipv4only.arpa' query <xref target="RFC7050"/>, and that special query only
-      exists because the IETF determined that clients *can't* safely assume that
-      all NAT64 gateways use the same Well-Known Prefix for IPv6 address synthesis.
-      If we could safely assume that all NAT64 gateways use the same Well-Known
-      Prefix for IPv6 address synthesis then clients could simply hard-code
-      the Well-Known Prefix instead of trying to discover it from the network,
-      and we wouldn't need the 'ipv4only.arpa' query at all.)</t>
+      synthesis <xref target="RFC6052"/>, but that would alleviate the need for
+      'ipv4only.arpa' altogether.)</t>
 
       <t>This document leverages this operational experience to update the
       <xref target="RFC6761">Domain Name Reservation Considerations section</xref>
@@ -261,7 +255,7 @@
       The 'ipv4only.arpa' query is being used purely as a local
       client-to-middlebox communication message.</t>
 
-      <t>This approach is even more attractive if it doesn't create
+      <t>This approach is even more attractive if it does not create
       an additional dependency on the authoritative 'arpa' name
       servers to answer a query that is unnecessary
       because the NAT64/DNS64 gateway already knows the answer
@@ -298,8 +292,8 @@
       <section anchor="terminology" title="Conventions and Terminology Used in this Section">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL"
-        in this section are to be interpreted as described in "Key words for use
-        in RFCs to Indicate Requirement Levels" <xref target="RFC2119"/>.</t>
+        in this section are to be interpreted as described in
+        <xref target="RFC2119">Key words for use in RFCs to Indicate Requirement Levels</xref>.</t>
       </section>
 
       <section title="ipv4only.arpa">
@@ -346,10 +340,10 @@
             the loopback address as their configured recursive/caching DNS server address)
             all queries for 'ipv4only.arpa' and any subdomains of that name
             MUST be sent to the recursive/caching DNS server learned from the network
-            via DHCPv6 <xref target="RFC3315"/><xref target="RFC3646"/><xref target="RFC3736"/>
-            or via the newer IPv6 Router Advertisement Options for DNS Configuration <xref target="RFC6106"/>.
+            via <xref target="RFC6106">IPv6 Router Advertisement Options for DNS Configuration</xref>
+            or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
             Because DNS queries for 'ipv4only.arpa' are actually a special middlebox
-            communication protocol in disguise, it is essential that they go to the middlebox
+            communication protocol, it is essential that they go to the middlebox
             in question, and failure to honor this requirement would cause failure of
             the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>.</t>
 
@@ -393,7 +387,7 @@
             other name about which they have no information.</t>
 
             <t>Generally speaking, operators of authoritative DNS servers need
-            not know anything about the name 'ipv4only.arpa', just as they don't need
+            not know anything about the name 'ipv4only.arpa', just as they do not need
             to know anything about any other names they are not responsible for.
             Operators of authoritative DNS servers who are configuring their name servers
             to be authoritative for this name MUST understand that 'ipv4only.arpa' is
@@ -401,7 +395,7 @@
             (generally this applies only to the administrators of the 'arpa' namespace).</t>
 
             <t>DNS Registries/Registrars need not know anything about the
-            name 'ipv4only.arpa', just as they don't need to know
+            name 'ipv4only.arpa', just as they do not need to know
             anything about any other name they are not responsible for.
             Only the administrators of the 'arpa' namespace need to be aware
             of this name's purpose and how it should be configured.</t>
@@ -474,7 +468,7 @@
             other name about which they have no information.</t>
 
             <t>Generally speaking, operators of authoritative DNS servers need
-            not know anything about these two reverse mapping names, just as they don't need
+            not know anything about these two reverse mapping names, just as they do not need
             to know anything about any other names they are not responsible for.
             Operators of authoritative DNS servers who are configuring their name servers
             to be authoritative for this name MUST understand that these two reverse
@@ -482,7 +476,7 @@
             (generally this applies only to the administrators of the '192.in&nbhy;addr.arpa' namespace).</t>
 
             <t>DNS Registries/Registrars need not know anything about
-            these two reverse mapping names, just as they don't need to know
+            these two reverse mapping names, just as they do not need to know
             anything about any other name they are not responsible for.
             Only the administrators of the '192.in&nbhy;addr.arpa' namespace need
             to be aware of the purpose of these two names.</t>
@@ -513,7 +507,7 @@
 
           <t>In the case of a client that uses the 'ipv4only.arpa' query to discover the
           IPv6 prefixes in use by the local NAT64 gateway, and then proceeds to perform
-          its own address synthesis locally (which has benefits for things like DNSSEC),
+          its own address synthesis locally (which has benefits such as allowing DNSSEC validation),
           that client MUST also synthesize 'ip6.arpa' reverse mapping PTR
           records for those discovered prefix(es), according to the rules above:
           When a client's name resolution APIs and libraries receive a request
@@ -556,9 +550,7 @@
 
     <references title="Informative References">
 
-      <?rfc include="reference.RFC.3315" ?>
       <?rfc include="reference.RFC.3646" ?>
-      <?rfc include="reference.RFC.3736" ?>
       <?rfc include="reference.RFC.6106" ?>
 
       <reference anchor="SUDN"

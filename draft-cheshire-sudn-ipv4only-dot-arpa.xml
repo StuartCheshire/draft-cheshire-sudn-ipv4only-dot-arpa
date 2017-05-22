@@ -165,6 +165,53 @@
       having to perform an unnecessary query to obtain an answer that is already
       known in advance can add precious milliseconds of delay for no reason.</t>
 
+      <t>A more serious problem occurs when a device is configured to use a recursive/caching DNS
+      server other than the one it learned from the network. Typically a device joining a NAT64
+      network will learn the recursive/caching DNS server recommended for that network either
+      via DHCPv6 <xref target="RFC3315"/><xref target="RFC3646"/><xref target="RFC3736"/>
+      or via the newer IPv6 Router Advertisement Options for DNS Configuration <xref target="RFC6106"/>.
+      On a NAT64 network it is essential that the client use the recursive/caching
+      DNS64 server recommended for that network, since only that DNS64 server can
+      be relied upon to know the appropriate prefix(es) to use for synthesizing IPv6
+      addresses that will be acceptable to the NAT64 server.</t>
+
+      <t>However, it is not uncommon for users to manually override their default
+      DNS configuration because they wish to use some other public recursive
+      resolver on the Internet, perhaps because they perceive their preferred
+      recursive resolver to be faster, more reliable, or more trustworthy.</t>
+
+      <t>Another common scenario is use of VPN client software, which overrides the
+      default configuration to divert DNS requests to the company's own private internal
+      recursive resolver, because the local network's recursive resolver will typically
+      be unable to provide answers for the company's private internal host names.
+      However, by a similar token, it's not safe to assume that the company's
+      private internal recursive resolver will be able to synthesize IPv6
+      addresses correctly for use with the local network's NAT64 server.
+      It is clear that a single recursive resolver cannot meet both needs.
+      The local network's recursive resolver cannot give answers for some
+      company's private internal host names, and some company's private internal
+      recursive resolver cannot give correctly synthesized IPv6 addresses
+      suitable for the local network's NAT64 gateway.</t>
+
+      <t>The conflict here arises because DNS is being used for two unrelated purposes.
+      The first purpose is retrieving data from a (nominally) global database --
+      generally retrieving the IP address(es) associated with a hostname.
+      The second purpose is using the DNS protocol as a middlebox communication
+      protocol in disguise, to interrogate the local network infrastructure to discover
+      the IPv6 prefix(es) in use by the local NAT64 gateway for address synthesis.</t>
+
+      <t>(Possibly this problem could be solved if we could force all
+      NAT64 gateways to use the same Well-Known Prefix for IPv6 address
+      synthesis <xref target="RFC6052"/>, but this is circular reasoning.
+      This document only exists to elaborate on the specification of the special
+      'ipv4only.arpa' query <xref target="RFC7050"/>, and that special query only
+      exists because the IETF determined that clients *can't* safely assume that
+      all NAT64 gateways use the same Well-Known Prefix for IPv6 address synthesis.
+      If we could safely assume that all NAT64 gateways use the same Well-Known
+      Prefix for IPv6 address synthesis then clients could simply hard-code
+      the Well-Known Prefix instead of trying to discover it from the network,
+      and we wouldn't need the 'ipv4only.arpa' query at all.)</t>
+
       <t>This document leverages this operational experience to update the
       <xref target="RFC6761">Domain Name Reservation Considerations section</xref>
       of <xref target="RFC7050">the earlier specification</xref>
@@ -271,10 +318,11 @@
         'ipv4only.arpa' are defined to be nonexistent (NXDOMAIN).</t>
 
     <?rfc needLines="10" ?>
-        <t>The name 'ipv4only.arpa' is special only to<vspace />
-        (a) client software wishing to perform DNS64 address synthesis, and<vspace />
-        (b) the DNS64 recursive/caching server responding to such requests.<vspace />
-        These two considerations are listed in items 2 and 4 below:
+        <t>The name 'ipv4only.arpa' is special to<vspace />
+        (a) client software wishing to perform DNS64 address synthesis,<vspace />
+        (b) APIs responsible for retrieving the correct information, and<vspace />
+        (c) the DNS64 recursive/caching server responding to such requests.<vspace />
+        These three considerations are listed in items 2, 3 and 4 below:
 
           <list style="numbers">
             <t>Normal users should never have reason to encounter the 'ipv4only.arpa' domain name.
@@ -289,11 +337,20 @@
             course of handling user input, the application software should resolve
             that name as usual and need not treat it in any special way.</t>
 
-            <t>Name resolution APIs and libraries MUST NOT recognize
-            'ipv4only.arpa' as special and MUST NOT treat it differently.
-            Name resolution APIs MUST treat this name just as they would any other normal DNS name,
-            and send queries for it to their configured recursive/caching DNS server(s).<vspace />
-            Failure to honor this requirement would cause failure of<vspace />
+            <t>Name resolution APIs and libraries MUST recognize
+            'ipv4only.arpa' as special and MUST give it special treatment.
+            Regardless of any manual client DNS configuration, DNS overrides
+            configured by VPN client software, or any other mechanisms that influence
+            the choice of the client's recursive/caching DNS server address(es)
+            (including client devices that run their own local recursive resolver and use
+            the loopback address as their configured recursive/caching DNS server address)
+            all queries for 'ipv4only.arpa' and any subdomains of that name
+            MUST be sent to the recursive/caching DNS server learned from the network
+            via DHCPv6 <xref target="RFC3315"/><xref target="RFC3646"/><xref target="RFC3736"/>
+            or via the newer IPv6 Router Advertisement Options for DNS Configuration <xref target="RFC6106"/>.
+            Because DNS queries for 'ipv4only.arpa' are actually a special middlebox
+            communication protocol in disguise, it is essential that they go to the middlebox
+            in question, and failure to honor this requirement would cause failure of
             the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>.</t>
 
 <?rfc needLines="5" ?>
@@ -385,10 +442,9 @@
             then the "host" command should issue the query as usual and display the
             result that is returned.</t>
 
-            <t>Name resolution APIs and libraries MUST NOT recognize
-            these two reverse mapping names as special and MUST NOT treat them differently.
-            Name resolution APIs MUST treat these names just as they would any other normal DNS name,
-            and send queries for them to their configured recursive/caching DNS server(s).</t>
+            <t>Name resolution APIs and libraries SHOULD recognize
+            these two reverse mapping names as special and generate the required responses
+            locally according to the rules described below for recursive/caching DNS servers.</t>
 
 <?rfc needLines="12" ?>
             <t>Recursive/caching DNS servers SHOULD recognize these two reverse mapping
@@ -433,6 +489,7 @@
           </list>
         </t>
 
+<?rfc needLines="11" ?>
         <section title="ip6.arpa Reverse Mapping PTR Records">
           <t>For all IPv6 addresses synthesized by a DNS64 recursive resolver,
           the DNS64 recursive resolver server is responsible for
@@ -453,6 +510,21 @@
           the DNS64 recursive/caching server does not issue reverse mapping queries
           for those IPv4 addresses, but instead, according to rule 3 above,
           immediately returns the answer 'ipv4only.arpa'.</t>
+
+          <t>In the case of a client that uses the 'ipv4only.arpa' query to discover the
+          IPv6 prefixes in use by the local NAT64 gateway, and then proceeds to perform
+          its own address synthesis locally (which has benefits for things like DNSSEC),
+          that client MUST also synthesize 'ip6.arpa' reverse mapping PTR
+          records for those discovered prefix(es), according to the rules above:
+          When a client's name resolution APIs and libraries receive a request
+          to look up an 'ip6.arpa' reverse mapping PTR record for an address that
+          falls within one of the discovered NAT64 address synthesis prefixes,
+          the software extracts the embedded IPv4 address and then,
+          for IPv4 addresses 192.0.0.170 and 192.0.0.171, returns the fixed answer 'ipv4only.arpa',
+          and for all other IPv4 addresses performs a reverse mapping PTR query for
+          the IPv4 address, and then synthesizes a corresponding 'ip6.arpa'
+          reverse mapping PTR record containing the same rdata.</t>
+
         </section>
       </section>
     </section>
@@ -475,6 +547,7 @@
     <?rfc needLines="38" ?>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119" ?>
+      <?rfc include="reference.RFC.6052" ?>
       <?rfc include="reference.RFC.6146" ?>
       <?rfc include="reference.RFC.6147" ?>
       <?rfc include="reference.RFC.6761" ?>
@@ -482,6 +555,11 @@
     </references>
 
     <references title="Informative References">
+
+      <?rfc include="reference.RFC.3315" ?>
+      <?rfc include="reference.RFC.3646" ?>
+      <?rfc include="reference.RFC.3736" ?>
+      <?rfc include="reference.RFC.6106" ?>
 
       <reference anchor="SUDN"
       target="https://www.iana.org/assignments/special-use-domain-names/">
@@ -503,7 +581,7 @@
 
     </references>
 
-<?rfc needLines="30" ?>
+<?rfc needLines="40" ?>
     <section anchor="app-a" title="Example BIND 9 Configuration">
       <t>A BIND 9 recursive/caching DNS server could be configured to
       act as authoritative for the appropriate names as follows.</t>

@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-07" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-08" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -581,20 +581,20 @@
       <t><vspace blankLines="2" />
       The file /var/named/ipv4only is created with the following content:
       <figure><artwork>
- $TTL 86400               ; Default TTL 24 hours
- @ IN SOA nameserver.example. admin.nameserver.example. (
-          2016052400      ; Serial
-          7200            ; Refresh ( 7200 = 2 hours)
-          3600            ; Retry   ( 3600 = 1 hour)
-          15724800        ; Expire  (15724800 = 6 months)
-          60              ; Minimum
-          )
- @ IN NS  nameserver.example.
+$TTL 86400               ; Default TTL 24 hours
+@ IN SOA nameserver.example. admin.nameserver.example. (
+         2016052400      ; Serial
+         7200            ; Refresh ( 7200 = 2 hours)
+         3600            ; Retry   ( 3600 = 1 hour)
+         15724800        ; Expire  (15724800 = 6 months)
+         60              ; Minimum
+         )
+@ IN NS  nameserver.example.
 
- @ IN A     192.0.0.170
- @ IN A     192.0.0.171
- @ IN AAAA  64:ff9b::192.0.0.170 ; If not using NAT64 Well-Known Prefix
- @ IN AAAA  64:ff9b::192.0.0.171 ; Place actual prefix here</artwork></figure></t>
+@ IN A    192.0.0.170
+@ IN A    192.0.0.171
+@ IN AAAA 64:ff9b::192.0.0.170 ; If not using NAT64 Well-Known Prefix
+@ IN AAAA 64:ff9b::192.0.0.171 ; place actual prefix here</artwork></figure></t>
 
     </section>
 

@@ -74,14 +74,23 @@
     <date day='22' month='May' year='2017'/>
 
     <abstract>
-      <t>The specification for how a client discovers its network's NAT64
-      prefix [RFC7050] defines the special name 'ipv4only.arpa' for this purpose,
+      <t>The specification for
+      how a client discovers its network's NAT64 prefix [RFC7050]
+      defines the special name 'ipv4only.arpa' for this purpose,
       but declares it to be a non-special name in
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
       (at the time of writing) 'ipv4only.arpa' still does not appear as one of the names with special
       properties recorded in the Special-Use Domain Names registry.</t>
+
+      <t>As a result of this omission, in cases where software needs
+      to give this name special treatment in order for it to work correctly,
+      there is no clear mandate authorizing software authors to implement that
+      special treatment. Software implementers are left with the choice
+      between not implementing the special behavior necessary for the name
+      queries to work correctly, or implementing the special behavior
+      and being accused of being noncompliant with some RFC.</t>
 
       <t>This document formally declares the actual
       special properties of the name, and adds similar declarations
@@ -102,8 +111,16 @@
       (at the time of writing) 'ipv4only.arpa' still does not appear as one of the names with special
       properties recorded in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
 
+      <t>As a result of this omission, in cases where software needs
+      to give this name special treatment in order for it to work correctly,
+      there is no clear mandate authorizing software authors to implement that
+      special treatment. Software implementers are left with the choice
+      between not implementing the special behavior necessary for the name
+      queries to work correctly, or implementing the special behavior
+      and being accused of being noncompliant with some RFC.</t>
+
       <t>This document formally declares the actual
-      special properties of the name. This document also adds similar declarations
+      special properties of the name, and adds similar declarations
       for the corresponding reverse mapping names.</t>
     <?rfc needLines="24" ?>
     </section>
@@ -295,7 +312,7 @@
         <xref target="RFC2119">"Key words for use in RFCs to Indicate Requirement Levels"</xref>.</t>
       </section>
 
-      <section title="ipv4only.arpa">
+      <section title="Special Use Domain Name 'ipv4only.arpa'">
         <t>The name 'ipv4only.arpa' is defined, by Internet Standard, to have
         two IPv4 address records with rdata 192.0.0.170 and 192.0.0.171.</t>
 
@@ -405,7 +422,7 @@
       </section>
 
 <?rfc needLines="12" ?>
-      <section title="170.0.0.192.in&nbhy;addr.arpa and 171.0.0.192.in&nbhy;addr.arpa">
+      <section title="Names '170.0.0.192.in&nbhy;addr.arpa' and '171.0.0.192.in&nbhy;addr.arpa'">
         <t>Since the IPv4 addresses 192.0.0.170 and 192.0.0.171 are defined
         to be special, and are listed in the
         <xref target="SUv4">IPv4 Special-Purpose Address Registry</xref>,
@@ -413,10 +430,12 @@
         are similarly special.</t>
 
         <t>The name '170.0.0.192.in&nbhy;addr.arpa' is defined, by Internet Standard,
-        to have only a single DNS record, type PTR, with rdata 'ipv4only.arpa'.</t>
+        to have only a single DNS record,
+        type&nbsp;PTR,&nbsp;with&nbsp;rdata&nbsp;'ipv4only.arpa'.</t>
 
         <t>The name '171.0.0.192.in&nbhy;addr.arpa' is defined, by Internet Standard,
-        to have only a single DNS record, type PTR, with rdata 'ipv4only.arpa'.</t>
+        to have only a single DNS record,
+        type&nbsp;PTR,&nbsp;with&nbsp;rdata&nbsp;'ipv4only.arpa'.</t>
 
         <t>There are no subdomains of '170.0.0.192.in&nbhy;addr.arpa' or '171.0.0.192.in&nbhy;addr.arpa'.
         All names falling below these names are defined to be nonexistent (NXDOMAIN).</t>
@@ -573,28 +592,26 @@
       <t>A BIND 9 recursive/caching DNS server can be configured to
       act as authoritative for the necessary DNS64 names as described below.</t>
 
-      <t><vspace blankLines="2" />
-      In /etc/named.conf the following line is added:
+      <t>In /etc/named.conf the following line is added:
       <figure><artwork>
- zone "ipv4only.arpa"            { type master; file "ipv4only"; };</artwork></figure></t>
+   zone "ipv4only.arpa"            { type master; file "ipv4only"; };</artwork></figure></t>
 
-      <t><vspace blankLines="2" />
-      The file /var/named/ipv4only is created with the following content:
+      <t>The file /var/named/ipv4only is created with the following content:
       <figure><artwork>
-$TTL 86400               ; Default TTL 24 hours
-@ IN SOA nameserver.example. admin.nameserver.example. (
-         2016052400      ; Serial
-         7200            ; Refresh ( 7200 = 2 hours)
-         3600            ; Retry   ( 3600 = 1 hour)
-         15724800        ; Expire  (15724800 = 6 months)
-         60              ; Minimum
-         )
-@ IN NS  nameserver.example.
+   $TTL 86400               ; Default TTL 24 hours
+   @ IN SOA nameserver.example. admin.nameserver.example. (
+            2016052400      ; Serial
+            7200            ; Refresh ( 7200 = 2 hours)
+            3600            ; Retry   ( 3600 = 1 hour)
+            15724800        ; Expire  (15724800 = 6 months)
+            60              ; Minimum
+            )
+   @ IN NS  nameserver.example.
 
-@ IN A    192.0.0.170
-@ IN A    192.0.0.171
-@ IN AAAA 64:ff9b::192.0.0.170 ; If not using NAT64 Well-Known Prefix
-@ IN AAAA 64:ff9b::192.0.0.171 ; place actual prefix here</artwork></figure></t>
+   @ IN A    192.0.0.170
+   @ IN A    192.0.0.171
+   @ IN AAAA 64:ff9b::192.0.0.170 ; If not using Well-Known Prefix
+   @ IN AAAA 64:ff9b::192.0.0.171 ; place actual NAT64 prefix here</artwork></figure></t>
 
     </section>
 

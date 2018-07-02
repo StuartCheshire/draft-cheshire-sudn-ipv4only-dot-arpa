@@ -198,7 +198,7 @@
       <t>A more serious problem occurs when a device is configured to use a recursive resolver
       other than the one it learned from the network. Typically a device joining a NAT64
       network will learn the recursive resolver recommended for that network either
-      via <xref target="RFC6106">IPv6 Router Advertisement Options for DNS Configuration</xref>
+      via <xref target="RFC8106">IPv6 Router Advertisement Options for DNS Configuration</xref>
       or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
       On a NAT64 network it is essential that the client use the
       DNS64 recursive resolver recommended for that network, since only that recursive resolver can
@@ -395,7 +395,7 @@
             the loopback address as their configured recursive resolver address)
             all queries for 'ipv4only.arpa' and any subdomains of that name
             MUST be sent to the recursive resolver learned from the network interface in question
-            via <xref target="RFC6106">IPv6 Router Advertisement Options for DNS Configuration</xref>
+            via <xref target="RFC8106">IPv6 Router Advertisement Options for DNS Configuration</xref>
             or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
             Because DNS queries for 'ipv4only.arpa' are actually a special middlebox
             communication protocol, it is essential that they go to the correct middlebox
@@ -607,7 +607,7 @@
       <?rfc include="reference.RFC.2119" ?>
       <?rfc include="reference.RFC.3646" ?>
       <?rfc include="reference.RFC.6052" ?>
-      <?rfc include="reference.RFC.6106" ?>
+      <?rfc include="reference.RFC.8106" ?>
       <?rfc include="reference.RFC.6146" ?>
       <?rfc include="reference.RFC.6147" ?>
       <?rfc include="reference.RFC.6761" ?>

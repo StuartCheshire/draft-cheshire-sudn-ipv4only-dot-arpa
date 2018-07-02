@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-09" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-10" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -70,7 +70,7 @@
       </address>
     </author>
 
-    <date day='1' month='May' year='2018'/>
+    <date day='2' month='July' year='2018'/>
 
     <abstract>
       <t>The specification for
@@ -129,6 +129,15 @@
     <?rfc needLines="24" ?>
     </section>
 
+    <section anchor="terminology" title="Conventions and Terminology Used in this Section">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",<vspace />
+      and "OPTIONAL" in this section are to be interpreted as described<vspace />
+      in "Key words for use in RFCs to Indicate Requirement Levels",<vspace />
+      when, and only when, they appear in all capitals, as shown here<vspace />
+      <xref target="RFC2119"/> <xref target="RFC8174"/>.</t>
+    </section>
+
     <section title="Specialness of 'ipv4only.arpa'">
       <t>The hostname 'ipv4only.arpa' is peculiar in that it was never intended
       to be treated like a normal hostname.</t>
@@ -175,7 +184,7 @@
       pointless additional load on the authoritative 'arpa' name servers, which was completely
       unnecessary when the name 'ipv4only.arpa' is defined, by Internet Standard,
       to have exactly two IPv4 address records, 192.0.0.170 and 192.0.0.171,
-      and no other records of any type.</t>
+      and no other IPv4 or IPv6 address records.</t>
 
       <t>Also, at times, for reasons that remain
       unclear, the authoritative 'arpa' name servers have been observed to be slow or unresponsive.
@@ -288,6 +297,27 @@
       before it even issues the query. Avoiding this unnecessary
       query improves performance and reliability for the client,
       and reduces unnecessary load for the authoritative 'arpa' name servers.</t>
+
+      <t>Note that there are two security paths to consider here:
+      The path from the authoritative server to the DNS64 recursive resolver,
+      and the path from the DNS64 recursive resolver to the ultimate client.
+      On either or both paths there may be one or more DNS64-unaware
+      recursive resolvers.</t>
+
+      <t>The path from the authoritative server to the DNS64 recursive resolver
+      (queries for IPv4 address records)
+      need not be protected by DNSSEC, because the DNS64 recursive resolver
+      already knows, by specification, what the answers are.
+      Run-time cryptographic signatures are not needed to verify the value compile-time constants.</t>
+
+      <t>The path from the DNS64 recursive resolver to the ultimate client
+      (queries for IPv6 address records)
+      *cannot* be protected by DNSSEC, because the DNS64 recursive resolver
+      is synthesizing IPv6 address answers that cannot be assumed to be signed
+      by the authoritative server.</t>
+
+      <t>Consequently, the ipv4only.arpa zone MUST be an insecure delegation.</t>
+
     </section>
 
     <section title="IANA Considerations">
@@ -311,18 +341,10 @@
         </list>
       </t>
       <?rfc subcompact="no" ?>
+<?rfc needLines="20" ?>
     </section>
 
     <section title="Domain Name Reservation Considerations">
-
-      <section anchor="terminology" title="Conventions and Terminology Used in this Section">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",<vspace />
-        and "OPTIONAL" in this section are to be interpreted as described<vspace />
-        in "Key words for use in RFCs to Indicate Requirement Levels",<vspace />
-        when, and only when, they appear in all capitals, as shown here<vspace />
-        <xref target="RFC2119"/> <xref target="RFC8174"/>.</t>
-      </section>
 
       <section title="Special Use Domain Name 'ipv4only.arpa'">
         <t>The name 'ipv4only.arpa' is defined, by Internet Standard, to have
@@ -335,7 +357,7 @@
         This can return more than one pair of IPv6 addresses
         if there are multiple NAT64 prefixes.</t>
 
-        <t>The name 'ipv4only.arpa' has no other DNS records of any type.<vspace />
+        <t>The name 'ipv4only.arpa' has no other IPv4 or IPv6 address records.<vspace />
         There are no subdomains of ipv4only.arpa. All names falling below
         'ipv4only.arpa' are defined to be nonexistent (NXDOMAIN).</t>
 
@@ -361,18 +383,23 @@
 
             <t>Name resolution APIs and libraries MUST recognize
             'ipv4only.arpa' as special and MUST give it special treatment.
+            Learning a network's NAT64 prefix is by its nature an interface-specific
+            operation, and the special DNS query used to learn this interface-specific
+            NAT64 prefix MUST be sent to the
+            DNS recursive resolver address(es) the client learned via the configuration
+            machinery for that specific client interface.
             Regardless of any manual client DNS configuration, DNS overrides
             configured by VPN client software, or any other mechanisms that influence
             the choice of the client's recursive resolver address(es)
             (including client devices that run their own local recursive resolver and use
             the loopback address as their configured recursive resolver address)
             all queries for 'ipv4only.arpa' and any subdomains of that name
-            MUST be sent to the recursive resolver learned from the network
+            MUST be sent to the recursive resolver learned from the network interface in question
             via <xref target="RFC6106">IPv6 Router Advertisement Options for DNS Configuration</xref>
             or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
             Because DNS queries for 'ipv4only.arpa' are actually a special middlebox
-            communication protocol, it is essential that they go to the middlebox
-            in question, and failure to honor this requirement would cause failure of
+            communication protocol, it is essential that they go to the correct middlebox
+            for the interface in question, and failure to honor this requirement would cause failure of
             the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>.</t>
 
 <?rfc needLines="5" ?>
@@ -402,7 +429,12 @@
             All names falling below 'ipv4only.arpa' are defined to be nonexistent.
             <vspace blankLines="1" />
             An example configuration for BIND 9 showing how to achieve the desired result
-            is given in <xref target="app-a" format="none">Appendix A</xref>.</t>
+            is given in <xref target="app-a" format="none">Appendix A</xref>.
+            <vspace blankLines="1" />
+            Note that this is *not* a locally served zone in the usual sense of that term
+            <xref target="RFC6303"/> because this rule applies *only* to DNS64 recursive resolvers,
+            not *all* DNS recursive resolvers.
+            </t>
 
             <t>Traditional authoritative name server software need not recognize
             'ipv4only.arpa' as special or handle it in any special way.<vspace />
@@ -428,7 +460,13 @@
             name 'ipv4only.arpa', just as they do not need to know
             anything about any other name they are not responsible for.
             Only the administrators of the 'arpa' namespace need to be aware
-            of this name's purpose and how it should be configured.</t>
+            of this name's purpose and how it should be configured.
+            In particular, ipv4only.arpa MUST be created as an insecure delegation,
+            to allow DNS64 recursive resolvers to create synthesized AAAA answers
+            within that zone. Signing the ipv4only.arpa would make it impossible
+            for DNS64 recursive resolvers to create synthesized AAAA answers that
+            won't fail DNSSEC validation, thereby defeating the entire purpose of ipv4only.arpa.
+            </t>
           </list>
         </t>
       </section>
@@ -579,6 +617,7 @@
 
     <references title="Informative References">
 
+      <?rfc include="reference.RFC.6303" ?>
       <?rfc include="reference.RFC.8244" ?>
 
       <reference anchor="SUDN"

@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-10" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-11" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -76,7 +76,7 @@
       <t>The specification for
       how a client discovers its network's NAT64 prefix [RFC7050]
       defines the special name 'ipv4only.arpa' for this purpose,
-      but declares it to be a non-special name in
+      but does not declares it to be a special-use domain name in
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
@@ -104,7 +104,7 @@
       <t>The specification for
       <xref target="RFC7050">how a client discovers its network's NAT64 prefix</xref>
       defines the special name 'ipv4only.arpa' for this purpose,
-      but declares it to be a non-special name in
+      but does not declares it to be a special-use domain name in
       that specification's Domain Name Reservation Considerations section.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
@@ -173,10 +173,10 @@
     <?rfc needLines="14" ?>
     </section>
 
-    <section title="Consequences of 'ipv4only.arpa' previously being declared unspecial">
+    <section title="Consequences of 'ipv4only.arpa' previously not being declared special">
       <t>As a result of <xref target="RFC7050">the original specification</xref>
       not formally declaring 'ipv4only.arpa' to have special properties,
-      there was no mandate for any DNS software to treat this name
+      there was no clear mandate for DNS software to treat this name
       specially. Consequently, queries for this name had to be handled normally,
       resulting in unnecessary queries to the authoritative 'arpa' name servers.</t>
 
@@ -231,14 +231,6 @@
       The second purpose is using the DNS protocol as a middlebox communication
       protocol, to interrogate the local network infrastructure to discover
       the IPv6 prefix(es) in use by the local NAT64 gateway for address synthesis.</t>
-
-      <t>Possibly this problem could have been avoided if we had forced all
-      NAT64 gateways to use the same Well-Known Prefix for IPv6 address
-      synthesis <xref target="RFC6052"/>. If the decision had been made
-      to use a single fixed Well-Known Prefix, then there would have been
-      no need for clients to discover the local network's NAT64 prefix,
-      and no need for the <xref target="RFC7050">'ipv4only.arpa'</xref> query.
-      However, that was not the decision that was made.</t>
 
       <t>This document leverages operational experience to update the
       <xref target="RFC6761">Domain Name Reservation Considerations</xref> section
@@ -411,7 +403,7 @@
             as special or give that name, or subdomains of that name, any special treatment.
             The rationale for this is that a traditional recursive resolver,
             such as built in to a home gateway, may itself be downstream of a DNS64 recursive resolver.
-            Passing though the 'ipv4only.arpa' queries to the upstream DNS64 recursive resolver will allow
+            Passing through the 'ipv4only.arpa' queries to the upstream DNS64 recursive resolver will allow
             the correct NAT64 prefix to be discovered.
             <vspace blankLines="1" />
             All DNS64 recursive resolvers MUST recognize 'ipv4only.arpa'
@@ -606,7 +598,6 @@
     <references title="Normative References">
       <?rfc include="reference.RFC.2119" ?>
       <?rfc include="reference.RFC.3646" ?>
-      <?rfc include="reference.RFC.6052" ?>
       <?rfc include="reference.RFC.8106" ?>
       <?rfc include="reference.RFC.6146" ?>
       <?rfc include="reference.RFC.6147" ?>

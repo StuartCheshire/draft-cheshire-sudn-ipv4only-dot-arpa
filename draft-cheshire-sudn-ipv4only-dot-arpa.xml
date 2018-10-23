@@ -66,11 +66,11 @@
 
     <abstract>
       <t>The specification for
-      how a client discovers its network's NAT64 prefix [RFC7050]
+      how a client discovers its local network's NAT64 prefix [RFC7050]
       defines the special name 'ipv4only.arpa' for this purpose,
       but in its Domain Name Reservation Considerations section
       that specification indicates that the name actually has
-      no special properties, and does not request IANA to record
+      no particularly special properties would require special handling, and does not request IANA to record
       the name in the Special-Use Domain Names registry.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
@@ -96,11 +96,11 @@
     <?rfc needLines="10" ?>
     <section title="Introduction">
       <t>The specification for
-      <xref target="RFC7050">how a client discovers its network's NAT64 prefix</xref>
+      <xref target="RFC7050">how a client discovers its local network's NAT64 prefix</xref>
       defines the special name 'ipv4only.arpa' for this purpose,
       but in its Domain Name Reservation Considerations section
       that specification indicates that the name actually has
-      no special properties, and does not request IANA to record
+      no particularly special properties would require special handling, and does not request IANA to record
       the name in the <xref target="SUDN">Special-Use Domain Names registry</xref>.</t>
 
       <t>Consequently, despite the well articulated special purpose of the name,
@@ -152,11 +152,11 @@
 
       <?rfc needLines="3" ?>
       <t>This is clearly not a typical DNS name. In normal operation, clients never query for
-      the two records that do in fact exist; instead they query for records that
+      the two records that do in fact exist; instead clients query for records that
       are known to not exist, and then get positive answers to those abnormal queries.
       Clients are using DNS to perform queries for this name, but they are certainly not
       using DNS to learn legitimate answers from the name's legitimate authoritative server.
-      Instead, these clients have, in effect, co-opted the DNS protocol as
+      Instead, the DNS protocol has, in effect, been co-opted as
       an impromptu client-to-middlebox communication protocol, to communicate with the
       NAT64/DNS64 <xref target="RFC6146"/> <xref target="RFC6147"/> gateway,
       if present, and request that it disclose the prefix it is using for IPv6 address synthesis.</t>
@@ -174,7 +174,10 @@
       not formally declaring 'ipv4only.arpa' to have special properties,
       there was no clear mandate for DNS software to treat this name
       specially. Consequently, queries for this name had to be handled normally,
-      resulting in unnecessary queries to the authoritative 'arpa' name servers.</t>
+      resulting in unnecessary
+      IPv6 address record queries (DNS qtype "AAAA", always returning negative responses) and
+      IPv4 address record queries (DNS qtype "A", always returning the same positive responses)
+      to the authoritative 'arpa' name servers.</t>
 
       <t>Having millions of devices around the world issue these queries generated
       pointless additional load on the authoritative 'arpa' name servers, which was completely
@@ -271,7 +274,7 @@
       combining the IPv6 address synthesis prefix learned from the local NAT64/DNS64 gateway
       with the validated DNSSEC-signed data learned from the global Domain Name System.</t>
 
-      <t>It is conceivable that over time, if DNSSEC is successful, the
+      <t>It is conceivable that over time, if DNSSEC adoption continues to grow, the
       majority of clients could move to this validate-and-synthesize-locally
       model, which reduces the DNS64 machinery to the vestigial role of
       simply responding to the 'ipv4only.arpa' query to report the local
@@ -316,7 +319,7 @@
       <t>The path from the DNS64 recursive resolver to the ultimate client
       (queries for IPv6 address records)
       *cannot* be protected by DNSSEC, because the DNS64 recursive resolver
-      is synthesizing IPv6 address answers, and does not posess the secret
+      is synthesizing IPv6 address answers, and does not possess the secret
       key required to sign those answers.</t>
 
       <t>Consequently, the 'ipv4only.arpa' zone MUST be an insecure delegation,
@@ -325,8 +328,18 @@
       resolvers.
       DNSSEC-capable resolvers that follow this specification
       MUST NOT attempt to validate answers received in response to
-      queries for the IPv6 AAAA address records for 'ipv4only.arpa'.
-      </t>
+      queries for the IPv6 AAAA address records for 'ipv4only.arpa'.</t>
+
+      <t>The original <xref target="RFC7050">NAT64 Prefix Discovery specification</xref>
+      stated, incorrectly:
+<figure><artwork>
+   A signed "ipv4only.arpa." allows validating DNS64 servers
+   (see [RFC6147] Section 3, Case 5, for example) to detect
+   malicious AAAA resource records.  Therefore, the zone
+   serving the well-known name has to be protected with DNSSEC.</artwork></figure></t>
+
+      <t>This document updates <xref target="RFC7050">the previous specification</xref>
+      to correct that error. The 'ipv4only.arpa' zone MUST be an insecure delegation.</t>
 
     </section>
 
@@ -392,11 +405,21 @@
 
             <t>Name resolution APIs and libraries MUST recognize
             'ipv4only.arpa' as special and MUST give it special treatment.
+            <vspace blankLines="1"/>
             Learning a network's NAT64 prefix is by its nature an interface-specific
             operation, and the special DNS query used to learn this interface-specific
             NAT64 prefix MUST be sent to the
             DNS recursive resolver address(es) the client learned via the configuration
             machinery for that specific client interface.
+            One implication of this is that,
+            on any host with multiple physical interfaces (e.g., cellular data and Wi-Fi)
+            and/or multiple virtual interfaces (e.g., VPN tunnels),
+            for a client to learn the NAT64 prefix in use on a particular interface,
+            the DNS name resolution APIs used to look up the IPv6 addresses for
+            'ipv4only.arpa' MUST include a parameter for the client to specify
+            on which interface to perform this query.
+            The NAT64 prefix is a per-interface property, not a per-device property.
+            <vspace blankLines="1"/>
             Regardless of any manual client DNS configuration, DNS overrides
             configured by VPN client software, or any other mechanisms that influence
             the choice of the client's recursive resolver address(es)
@@ -410,6 +433,7 @@
             communication protocol, it is essential that they go to the correct middlebox
             for the interface in question, and failure to honor this requirement would cause failure of
             the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>.
+            <vspace blankLines="1"/>
             DNSSEC-capable resolvers MUST NOT attempt to validate answers received
             in response to queries for the IPv6 AAAA address records for 'ipv4only.arpa',
             since, by definition, any such answers are generated by the local network's
@@ -515,7 +539,7 @@
             <t>Application software SHOULD NOT recognize these two reverse mapping
             names as special, and SHOULD NOT treat them differently.<vspace />
             For example, if the user were to issue the Unix command "host&nbsp;192.0.0.170"
-            then the "host" command should issue the query as usual and display the
+            then the "host" command should call the name resolution API or library as usual and display the
             result that is returned.</t>
 
             <t>Name resolution APIs and libraries SHOULD recognize these two reverse
@@ -596,6 +620,7 @@
           the IPv4 address, and then synthesizes a corresponding 'ip6.arpa'
           reverse mapping PTR record containing the same rdata.</t>
 
+<?rfc needLines="38" ?>
         </section>
       </section>
     </section>
@@ -603,14 +628,22 @@
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>Thanks to Jouni Korhonen, Teemu Savolainen, and Dan Wing, for devising
       the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>,
-      and for their feedback on this document.
+      and for their feedback on this document.</t>
 
-      Thanks to Geoff Huston for his feedback on the draft,
-      and to Erik Kline for pointing out that the in&nbhy;addr.arpa names are special too.
+      <t>Thanks to Geoff Huston for his feedback on this document.</t>
 
-      Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
+      <t>Thanks to Erik Kline for pointing out that the in&nbhy;addr.arpa names are special too.</t>
+
+      <t>Thanks to Marc Andrews for pointing out the reasons why the 'ipv4only.arpa'
+      zone MUST be an insecure delegation in order for the
+      <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref> to work.</t>
+
+      <t>Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
       IETF 96 in Berlin, which lead directly to significant improvements in how this
       document presents the issues.</t>
+
+      <t>Thanks to Dave Thaler and Warren Kumari for generously helping
+      shepherd this document through the publication process.</t>
     </section>
 
   </middle>
@@ -677,7 +710,7 @@
    @ IN A    192.0.0.170
    @ IN A    192.0.0.171
    @ IN AAAA 64:ff9b::192.0.0.170 ; If not using Well-Known Prefix
-   @ IN AAAA 64:ff9b::192.0.0.171 ; place actual NAT64 prefix here</artwork></figure></t>
+   @ IN AAAA 64:ff9b::192.0.0.171 ; place chosen NAT64 prefix here</artwork></figure></t>
 
     </section>
 

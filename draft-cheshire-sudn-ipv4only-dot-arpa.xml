@@ -56,8 +56,16 @@
       </address>
     </author>
 
-    <author initials='D.' surname='Schinazi' fullname='David Schinazi'>
+    <author fullname='David Schinazi' surname='Schinazi' initials='D.'>
+      <organization>Google LLC</organization>
       <address>
+        <postal>
+          <street>1600 Amphitheatre Parkway</street>
+          <city>Mountain View</city>
+          <region>California</region>
+          <code>94043</code>
+          <country>USA</country>
+        </postal>
         <email>dschinazi.ietf@gmail.com</email>
       </address>
     </author>

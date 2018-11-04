@@ -179,7 +179,8 @@
       there was no clear mandate for DNS software to treat this name specially.
       In particular, this lack of mandate for special treatment is relevant
       (a) to the name resolution APIs and libraries on client devices, and
-      (b) to DNS64 <xref target="RFC6147"/> implementations.</t>
+      (b) to DNS64 <xref target="RFC6147"/> implementations.
+      These two aspects are discussed in more detail below.</t>
 
       <section title="Consequences for Name Resolution APIs and Libraries">
         <t>A serious problem can occur with NAT64/DNS64 when a device is configured to
@@ -261,7 +262,7 @@
       <t>This document leverages operational experience to update the
       <xref target="RFC6761">Domain Name Reservation Considerations</xref> section of
       <xref target="RFC7050">the earlier specification</xref>
-      with one that
+      with one that more
       accurately lists the actual special properties of the name 'ipv4only.arpa',
       so that software can legitimately implement the correct behavior necessary
       for better performance, better reliability, and correct operation.</t>
@@ -270,9 +271,10 @@
       (a) the name resolution APIs and libraries on client devices, and
       (b) DNS64 implementations.</t>
 
-      <t>The special rules for name resolution APIs and libraries specify how they
+      <t>The new special rules specified in this document for name resolution APIs and libraries
+      state how they
       should select which recursive resolver to query to learn the IPv6 address
-      synthesis prefix in use on a particular interface.
+      synthesis prefix in use on a particular physical or virtual interface.
       Specifically: When querying for the name 'ipv4only.arpa',
       name resolution APIs and libraries should use the
       recursive resolver recommended by the network for the interface in question, rather than
@@ -280,16 +282,16 @@
       a recursive resolver configured by VPN software, or
       a full-service recursive resolver running on the local host.</t>
 
-      <t>The special rules for DNS64 implementations recommend that they avoid
-      performing run-time network queries for values that are fixed by specification.</t>
+      <t>The new special rules specified in this document for DNS64 implementations recommend that they avoid
+      performing run-time network queries for values that are known to be fixed by specification.</t>
 
       <t>A useful property of the way
       <xref target="RFC7050">NAT64 Prefix Discovery</xref>
-      was specified is that it allowed for incremental deployment.
-      Even if DNS64 gateways,
+      was originally specified was that it allowed for incremental deployment.
+      Even if existing DNS64 gateways,
       that were unaware of the special 'ipv4only.arpa' name, were already deployed,
       once IANA created the appropriate 'ipv4only.arpa' records,
-      clients could begin to use the facility immediately.
+      clients could begin to use the new facility immediately.
       Clients could send their special queries for 'ipv4only.arpa'
       to an ipv4only-unaware DNS64 gateway, and
       (after a query to IANA's servers)
@@ -359,11 +361,11 @@
       by malicious devices on the path.</t>
 
       <t>With respect to the question of whether 'ipv4only.arpa' should be
-      a secure or insecure delegation,
-      there are two paths of information flow through the network for us to consider:
+      a secure or insecure delegation, we need to consider
+      two paths of information flow through the network:
       The path from the authoritative server to the DNS64 recursive resolver,
       and the path from the DNS64 recursive resolver to the ultimate client.
-      On either or both paths there may be one or more DNS64-unaware
+      On either or both of these paths there may be one or more DNS64-unaware
       recursive resolvers.</t>
 
       <t>The path from the authoritative server to the DNS64 recursive resolver
@@ -693,7 +695,7 @@
 
       <t>Thanks to Erik Kline for pointing out that the in&nbhy;addr.arpa names are special too.</t>
 
-      <t>Thanks to Marc Andrews for pointing out the reasons why the 'ipv4only.arpa'
+      <t>Thanks to Mark Andrews for pointing out the reasons why the 'ipv4only.arpa'
       zone MUST be an insecure delegation in order for the
       <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref> to work.</t>
 

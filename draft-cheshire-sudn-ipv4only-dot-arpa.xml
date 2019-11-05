@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-14" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-15" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -70,7 +70,7 @@
       </address>
     </author>
 
-    <date day='4' month='November' year='2018'/>
+    <date day='4' month='November' year='2019'/>
 
     <abstract>
       <t>The specification for
@@ -228,6 +228,19 @@
         recursive resolver cannot give correctly synthesized IPv6 addresses
         suitable for the local network's NAT64 gateway.</t>
 
+        <t>Note that multiple NAT64 services may be simultaneously available to a client.
+        For example, the local network may
+        provide NAT64 service (to allow a IPv6-only client device to access IPv4-only Internet services),
+        while at the same time
+        the corporate VPN may also
+        provide NAT64 service (to allow a client connecting via an IPv6-only VPN tunnel to access IPv4-only corporate services).
+        The NAT64 address synthesis prefixes for the two NAT64 services may be different.
+        In this case is is essential that
+        the NAT64 address synthesis prefix used on the local network
+        be the prefix learned from the local network's recursive resolver, and
+        the NAT64 address synthesis prefix used on the VPN tunnel
+        be the prefix learned from the VPN tunnel's recursive resolver.</t>
+
         <t>The conflict here arises because DNS is being used for two unrelated purposes.
         The first purpose is retrieving data from a (nominally) global database --
         generally retrieving the IP address(es) associated with a hostname.
@@ -371,10 +384,8 @@
       <t>With respect to the question of whether 'ipv4only.arpa' should be
       a secure or insecure delegation, we need to consider
       two paths of information flow through the network:
-      The path from the authoritative server to the DNS64 recursive resolver,
-      and the path from the DNS64 recursive resolver to the ultimate client.
-      On either or both of these paths there may be one or more DNS64-unaware
-      recursive resolvers.</t>
+      The path from the server authoritative for 'ipv4only.arpa' to the DNS64 recursive resolver,
+      and the path from the DNS64 recursive resolver to the ultimate client.</t>
 
       <t>The path from the authoritative server to the DNS64 recursive resolver
       (queries for IPv4 address records)
@@ -415,7 +426,11 @@
     <section title="IANA Considerations">
 
       <?rfc subcompact="yes" ?>
-      <t>[Once published] IANA has recorded the following names in the<vspace />
+
+      <t>[Once published] IANA has created an insecure delegation for 'ipv4only.arpa'
+      to allow DNS64 recursive resolvers to create synthesized AAAA answers within that zone.</t>
+
+      <t>IANA has recorded the following names in the<vspace />
       <xref target="SUDN">Special-Use Domain Names registry</xref>:
         <list style='empty'>
           <t>ipv4only.arpa.</t>
@@ -431,6 +446,7 @@
           <t>192.0.0.171</t>
         </list>
       </t>
+
       <?rfc subcompact="no" ?>
 <?rfc needLines="20" ?>
     </section>
@@ -496,8 +512,9 @@
             the loopback address as their configured recursive resolver address)
             all queries for 'ipv4only.arpa' and any subdomains of that name
             MUST be sent to the recursive resolver learned from the network interface in question
-            via <xref target="RFC8106">IPv6 Router Advertisement Options for DNS Configuration</xref>
-            or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
+            via <xref target="RFC8106">IPv6 Router Advertisement Options for DNS Configuration</xref>,
+            <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>,
+            or other configuration mechanisms.
             Because DNS queries for 'ipv4only.arpa' are actually a special middlebox
             communication protocol, it is essential that they go to the correct middlebox
             for the interface in question, and failure to honor this requirement would cause failure of
@@ -510,22 +527,38 @@
             </t>
 
 <?rfc needLines="5" ?>
-            <t>For the purposes of this section, recursive resolvers fall into two categories.
-            The first category is the traditional recursive resolvers that are in widespread use today.
-            The second category is DNS64 recursive resolvers, whose purpose is to synthesize IPv6 address records.
+            <t>For the purposes of this section, recursive resolvers fall into three categories.
+            The first category is *forwarding* recursive resolvers, as commonly implemented in residential home gateways.
+            The second category is *iterative* recursive resolvers, as commonly deployed by ISPs.
+            The third category is DNS64 recursive resolvers, whose purpose is to synthesize IPv6 address records.
             <vspace blankLines="1" />
-            Traditional recursive resolvers SHOULD NOT recognize 'ipv4only.arpa'
+            Forwarding recursive resolvers SHOULD NOT recognize 'ipv4only.arpa'
             as special or give that name, or subdomains of that name, any special treatment.
-            The rationale for this is that a traditional recursive resolver,
-            such as built in to a home gateway, may itself be downstream of a DNS64 recursive resolver.
+            The rationale for this is that a forwarding recursive resolver,
+            such as built in to a residential home gateway, may itself be downstream of a DNS64 recursive resolver.
             Passing through the 'ipv4only.arpa' queries to the upstream DNS64 recursive resolver will allow
             the correct NAT64 prefix to be discovered.
             <vspace blankLines="1" />
-            All DNS64 recursive resolvers MUST recognize 'ipv4only.arpa'
-            as special and MUST NOT attempt to look up NS records for it, or otherwise
-            query authoritative name servers in an attempt to resolve this name.
-            Instead, DNS64 recursive resolvers MUST act as authoritative for this domain
-            and generate immediate responses for all such queries.
+            Iterative recursive resolvers complying with this specification
+            MUST recognize 'ipv4only.arpa' as special, and MUST be configured to behave for these names either:
+            (a) like a forwarding recursive resolver as described above
+            (forwarding these queries to a configured upstream resolver), or
+            (b) like a DNS64 recursive resolver as described below.
+            <vspace blankLines="1" />
+            Since the authoritative name servers for 'ipv4only.arpa' cannot be
+            expected to know the local network's NAT64 address synthesis prefix,
+            all DNS64 recursive resolvers MUST recognize 'ipv4only.arpa' (and all of its subdomains) as special,
+            and MUST NOT attempt to look up NS records for 'ipv4only.arpa',
+            or otherwise query authoritative name servers in an attempt to resolve this name.
+            Instead, DNS64 recursive resolvers MUST act
+            as authoritative for this zone, by generating immediate responses for all queries
+            for 'ipv4only.arpa' (and any subdomain of 'ipv4only.arpa'), with the one
+            exception of queries for the DS record.
+            Queries for the DS record are resolved the usual way to allow a client
+            to securely verify that the 'ipv4only.arpa' zone has an insecure delegation.
+            Note that exception is not expected to received widspread usage,
+            since any client compliant with this specification already knows that
+            'ipv4only.arpa' is an insecure delegation and will not attempt DNSSEC validation for this name.
             <vspace blankLines="1" />
             DNS64 recursive resolvers MUST generate
             the 192.0.0.170 and 192.0.0.171 responses for IPv4 address queries (DNS qtype "A"),
@@ -540,40 +573,28 @@
             <vspace blankLines="1" />
             Note that this is *not* a locally served zone in the usual sense of that term
             <xref target="RFC6303"/> because this rule applies *only* to DNS64 recursive resolvers,
-            not *all* DNS recursive resolvers.
+            not to forwarding DNS recursive resolvers.
             </t>
 
-            <t>Traditional authoritative name server software need not recognize
-            'ipv4only.arpa' as special or handle it in any special way.<vspace />
-            Recursive resolvers SHOULD routinely act as
-            authoritative for this name and return the results described
-            above. Only the administrators of the 'arpa' namespace need to
-            explicitly configure their actual authoritative name servers to be
-            authoritative for this name
-            and to generate the appropriate answers; all other authoritative
-            name servers will not be configured to know anything about this name
-            and will reject queries for it, as they would reject queries for any
-            other name about which they have no information.</t>
+            <t>Authoritative name server software need not recognize
+            'ipv4only.arpa' as special or handle it in any special way.</t>
 
             <t>Generally speaking, operators of authoritative name servers need
             not know anything about the name 'ipv4only.arpa', just as they do not need
             to know anything about any other names they are not responsible for.
-            Operators of authoritative name servers who are configuring their name servers
-            to be authoritative for this name MUST understand that 'ipv4only.arpa' is
-            a special name, with records rigidly specified by Internet Standard
-            (generally this applies only to the administrators of the 'arpa' namespace).</t>
-
-            <t>DNS Registries/Registrars need not know anything about the
-            name 'ipv4only.arpa', just as they do not need to know
-            anything about any other name they are not responsible for.
             Only the administrators of the 'arpa' namespace need to be aware
             of this name's purpose and how it should be configured.
-            In particular, 'ipv4only.arpa' MUST be created as an insecure delegation,
+            In particular, 'ipv4only.arpa' MUST have the required records, and
+            MUST be an insecure delegation,
             to allow DNS64 recursive resolvers to create synthesized AAAA answers
             within that zone. Making the 'ipv4only.arpa' zone a secure delegation would make it impossible
             for DNS64 recursive resolvers to create synthesized AAAA answers that
             won't fail DNSSEC validation, thereby defeating the entire purpose of the 'ipv4only.arpa' name.
             </t>
+
+            <t>DNS Registries/Registrars need not know anything about
+            the name 'ipv4only.arpa', just as they do not need to know
+            anything about any other name they are not responsible for.</t>
           </list>
         </t>
 <?rfc needLines="12" ?>
@@ -626,30 +647,18 @@
             <t>Recursive resolvers SHOULD NOT recognize these two reverse mapping
             names as special and SHOULD NOT, by default, give them any special treatment.</t>
 
-            <t>Traditional authoritative name server software need not
-            recognize these two reverse mapping names as special or
-            handle them in any special way.
-            <vspace blankLines="1" />
-            As a practical matter, only the administrators of the '192.in&nbhy;addr.arpa' namespace
-            will configure their name servers to be authoritative for these names
-            and to generate the appropriate answers; all other authoritative
-            name servers will not be configured to know anything about these names
-            and will reject queries for them as they would reject queries for any
-            other name about which they have no information.</t>
+            <t>Authoritative name server software need not recognize
+            these two reverse mapping names as special or handle them in any special way.</t>
 
-            <t>Generally speaking, operators of authoritative name servers need
+            <t>Generally speaking, most operators of authoritative name servers need
             not know anything about these two reverse mapping names, just as they do not need
             to know anything about any other names they are not responsible for.
-            Operators of authoritative name servers who are configuring their name servers
-            to be authoritative for this name MUST understand that these two reverse
-            mapping names are special, with answers specified by Internet Standard
-            (generally this applies only to the administrators of the '192.in&nbhy;addr.arpa' namespace).</t>
+            Only the operators of the authoritative name servers for these two reverse mapping names
+            need to be aware that these names are special, and require fixed answers specified by Internet Standard.</t>
 
             <t>DNS Registries/Registrars need not know anything about
             these two reverse mapping names, just as they do not need to know
-            anything about any other name they are not responsible for.
-            Only the administrators of the '192.in&nbhy;addr.arpa' namespace need
-            to be aware of the purpose of these two names.</t>
+            anything about any other name they are not responsible for.</t>
           </list>
         </t>
 
@@ -705,7 +714,8 @@
 
       <t>Thanks to Mark Andrews for pointing out the reasons why the 'ipv4only.arpa'
       zone MUST be an insecure delegation in order for the
-      <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref> to work.</t>
+      <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref> to work,
+      and many other very helpful comments.</t>
 
       <t>Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
       IETF 96 in Berlin, which lead directly to significant improvements in how this

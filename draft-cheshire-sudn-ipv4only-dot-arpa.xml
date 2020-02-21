@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-15" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-16" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -70,7 +70,7 @@
       </address>
     </author>
 
-    <date day='4' month='November' year='2019'/>
+    <date/>
 
     <abstract>
       <t>The specification for
@@ -85,14 +85,6 @@
       'ipv4only.arpa' was not recorded in the
       Special-Use Domain Names registry
       as a name with special properties.</t>
-
-      <t>As a result of this omission, in cases where software needs
-      to give this name special treatment in order for it to work correctly,
-      there was no clear mandate authorizing software authors to implement that
-      special treatment. Software implementers were left with the choice
-      between not implementing the special behavior necessary for the name
-      queries to work correctly, or implementing the special behavior
-      and being accused of being noncompliant with some RFC.</t>
 
       <t>This document describes the special treatment required,
       formally declares the special properties of the name,
@@ -131,15 +123,15 @@
       formally declares the special properties of the name,
       and adds similar declarations for the corresponding reverse mapping names.</t>
     <?rfc needLines="24" ?>
-    </section>
 
-    <section anchor="terminology" title="Conventions and Terminology Used in this Section">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",<vspace />
-      and "OPTIONAL" in this section are to be interpreted as described<vspace />
-      in "Key words for use in RFCs to Indicate Requirement Levels",<vspace />
-      when, and only when, they appear in all capitals, as shown here<vspace />
-      <xref target="RFC2119"/> <xref target="RFC8174"/>.</t>
+      <section anchor="terminology" title="Conventions and Terminology">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",<vspace />
+        and "OPTIONAL" in this section are to be interpreted as described<vspace />
+        in "Key words for use in RFCs to Indicate Requirement Levels",<vspace />
+        when, and only when, they appear in all capitals, as shown here<vspace />
+        <xref target="RFC2119"/> <xref target="RFC8174"/>.</t>
+      </section>
     </section>
 
     <section title="Specialness of 'ipv4only.arpa'">
@@ -208,7 +200,8 @@
         resolver on the Internet, which may offer better speed, better reliability,
         or better privacy than the local network's default recursive resolver.
         At the time of writing, examples of widely known public recursive resolver services
-        include 1.1.1.1, 8.8.8.8, and 9.9.9.9.</t>
+        include <xref target="DNS1">1.1.1.1</xref>, <xref target="DNS8">8.8.8.8</xref>,
+        and <xref target="DNS9">9.9.9.9</xref>.</t>
 
         <t>Another common scenario is the use of corporate VPN client software.
         The local network's recursive resolver will typically
@@ -235,7 +228,7 @@
         the corporate VPN may also
         provide NAT64 service (to allow a client connecting via an IPv6-only VPN tunnel to access IPv4-only corporate services).
         The NAT64 address synthesis prefixes for the two NAT64 services may be different.
-        In this case is is essential that
+        In this case it is essential that
         the NAT64 address synthesis prefix used on the local network
         be the prefix learned from the local network's recursive resolver, and
         the NAT64 address synthesis prefix used on the VPN tunnel
@@ -454,7 +447,7 @@
     <section title="Domain Name Reservation Considerations">
 
       <section title="Special Use Domain Name 'ipv4only.arpa'">
-        <t>The name 'ipv4only.arpa' is defined, by Internet Standard, to have
+        <t>The name 'ipv4only.arpa' is <xref target="RFC7050">defined</xref> to have
         two IPv4 address records with rdata 192.0.0.170 and 192.0.0.171.</t>
 
         <t>When queried via a <xref target="RFC6147">DNS64</xref> recursive resolver, the name
@@ -530,6 +523,7 @@
             <t>For the purposes of this section, recursive resolvers fall into three categories.
             The first category is *forwarding* recursive resolvers, as commonly implemented in residential home gateways.
             The second category is *iterative* recursive resolvers, as commonly deployed by ISPs.
+            (More information on these terms can be found in <xref target="RFC8499">DNS Terminology</xref>.)
             The third category is DNS64 recursive resolvers, whose purpose is to synthesize IPv6 address records.
             <vspace blankLines="1" />
             Forwarding recursive resolvers SHOULD NOT recognize 'ipv4only.arpa'
@@ -744,6 +738,7 @@
 
       <?rfc include="reference.RFC.6303" ?>
       <?rfc include="reference.RFC.8244" ?>
+      <?rfc include="reference.RFC.8499" ?>
 
       <reference anchor="SUDN"
       target="https://www.iana.org/assignments/special-use-domain-names/">
@@ -758,6 +753,33 @@
       target="https://www.iana.org/assignments/iana-ipv4-special-registry/">
         <front>
           <title>IANA IPv4 Special-Purpose Address Registry</title>
+          <author/>
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="DNS1"
+      target="https://1.1.1.1/">
+        <front>
+          <title>1.1.1.1 - The free app that makes your Internet safer</title>
+          <author/>
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="DNS8"
+      target="https://developers.google.com/speed/public-dns/">
+        <front>
+          <title>Google Public DNS</title>
+          <author/>
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="DNS9"
+      target="https://quad9.net/">
+        <front>
+          <title>Quad9 - Internet Security and Privacy In a Few Easy Steps</title>
           <author/>
           <date/>
         </front>

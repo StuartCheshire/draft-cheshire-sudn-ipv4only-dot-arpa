@@ -111,6 +111,7 @@
 
       <t>This omission was discussed in
       <xref target="RFC8244">the Special-Use Domain Names Problem Statement</xref>.</t>
+    <?rfc needLines="24" ?>
 
       <t>As a result of this omission, in cases where software needs
       to give this name special treatment in order for it to work correctly,
@@ -123,7 +124,6 @@
       <t>This document describes the special treatment required,
       formally declares the special properties of the name,
       and adds similar declarations for the corresponding reverse mapping names.</t>
-    <?rfc needLines="24" ?>
 
       <section anchor="terminology" title="Conventions and Terminology">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -285,6 +285,7 @@
       <t>These changes affect two bodies of software,
       (a) the name resolution APIs and libraries on client devices, and
       (b) DNS64 implementations.</t>
+<?rfc needLines="30" ?>
 
       <t>The new special rules specified in this document for name resolution APIs and libraries
       state how they
@@ -320,8 +321,8 @@
       Network operators who wish to provide reliable, high performance service to
       their customers are strongly motivated to prefer DNS64 gateways that recognize
       the special 'ipv4only.arpa' name and apply the appropriate optimizations.</t>
+<?rfc needLines="30" ?>
 
-<?rfc needLines="20" ?>
     </section>
 
     <section title="Security Considerations">
@@ -366,6 +367,7 @@
       before it even issues the query. Avoiding this unnecessary
       query improves performance and reliability for the client,
       and reduces unnecessary load for the authoritative 'arpa' name servers.</t>
+<?rfc needLines="10" ?>
 
       <t>Hard-coding the known answers for
       'ipv4only.arpa' IPv4 address record queries (DNS qtype "A") in
@@ -442,7 +444,6 @@
       </t>
 
       <?rfc subcompact="no" ?>
-<?rfc needLines="20" ?>
     </section>
 
     <section title="Domain Name Reservation Considerations">
@@ -592,7 +593,7 @@
             anything about any other name they are not responsible for.</t>
           </list>
         </t>
-<?rfc needLines="12" ?>
+<?rfc needLines="25" ?>
       </section>
 
       <section title="Names '170.0.0.192.in&nbhy;addr.arpa' and '171.0.0.192.in&nbhy;addr.arpa'">
@@ -672,7 +673,7 @@
           performing a reverse mapping PTR query for that IPv4 address,
           and then synthesizing a corresponding 'ip6.arpa' reverse mapping
           PTR record containing the same rdata.</t>
-
+<?rfc needLines="20" ?>
           <t>In the case of synthesized IPv6 addresses corresponding
           to the IPv4 addresses 192.0.0.170 and 192.0.0.171,
           the DNS64 recursive resolver does not issue reverse mapping queries

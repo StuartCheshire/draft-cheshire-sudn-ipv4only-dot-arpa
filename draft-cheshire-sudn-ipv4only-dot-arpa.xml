@@ -550,7 +550,7 @@
             exception of queries for the DS record.
             Queries for the DS record are resolved the usual way to allow a client
             to securely verify that the 'ipv4only.arpa' zone has an insecure delegation.
-            Note that exception is not expected to received widspread usage,
+            Note that exception is not expected to received widespread usage,
             since any client compliant with this specification already knows that
             'ipv4only.arpa' is an insecure delegation and will not attempt DNSSEC validation for this name.
             <vspace blankLines="1" />

@@ -139,13 +139,13 @@
       to be treated like a normal hostname.</t>
 
       <t>A typical client never looks up the IPv4 address records for 'ipv4only.arpa',
-      because it is already known, <xref target="RFC7050">by specification</xref>,
+      because it is already known, <xref target="RFC7050">by IETF specification</xref>,
       to have exactly two IPv4 address records, 192.0.0.170 and 192.0.0.171.
       No client ever has to look up the name in order to learn those two addresses.</t>
 
       <t>In contrast, clients often look up the IPv6 AAAA address records for
       'ipv4only.arpa', which is contrary to general DNS expectations, given
-      that it is already known, <xref target="RFC7050">by specification</xref>,
+      that it is already known, <xref target="RFC7050">by IETF specification</xref>,
       that 'ipv4only.arpa' is an IPv4-only name, which has no IPv6 AAAA address records.
       And yet, clients expect to
       receive, and do in fact receive, positive answers for these IPv6 AAAA
@@ -252,7 +252,7 @@
 
         <t>Having DNS64 gateways around the world issue these queries generated
         additional load on the authoritative 'arpa' name servers, which was
-        redundant when the name 'ipv4only.arpa' is defined, by Internet Standard,
+        redundant when the name 'ipv4only.arpa' is defined, <xref target="RFC7050">by IETF specification</xref>,
         to have exactly two IPv4 address records, 192.0.0.170 and 192.0.0.171,
         and no other IPv4 or IPv6 address records.</t>
 
@@ -447,7 +447,7 @@
     <section title="Domain Name Reservation Considerations">
 
       <section title="Special Use Domain Name 'ipv4only.arpa'">
-        <t>The name 'ipv4only.arpa' is <xref target="RFC7050">defined</xref> to have
+        <t>The name 'ipv4only.arpa' is defined, <xref target="RFC7050">by IETF specification</xref>, to have
         two IPv4 address records with rdata 192.0.0.170 and 192.0.0.171.</t>
 
         <t>When queried via a <xref target="RFC6147">DNS64</xref> recursive resolver, the name
@@ -601,10 +601,10 @@
         the corresponding reverse mapping names in the in&nbhy;addr.arpa domain
         are similarly special.</t>
 
-        <t>The name '170.0.0.192.in&nbhy;addr.arpa' is defined, by Internet Standard,
+        <t>The name '170.0.0.192.in&nbhy;addr.arpa' is defined, <xref target="RFC7050">by IETF specification</xref>,
         to have only one DNS record, type PTR, with rdata 'ipv4only.arpa'.</t>
 
-        <t>The name '171.0.0.192.in&nbhy;addr.arpa' is defined, by Internet Standard,
+        <t>The name '171.0.0.192.in&nbhy;addr.arpa' is defined, <xref target="RFC7050">by IETF specification</xref>,
         to have only one DNS record, type PTR, with rdata 'ipv4only.arpa'.</t>
 
         <t>There are no subdomains of '170.0.0.192.in&nbhy;addr.arpa' or '171.0.0.192.in&nbhy;addr.arpa'.
@@ -648,7 +648,7 @@
             not know anything about these two reverse mapping names, just as they do not need
             to know anything about any other names they are not responsible for.
             Only the operators of the authoritative name servers for these two reverse mapping names
-            need to be aware that these names are special, and require fixed answers specified by Internet Standard.</t>
+            need to be aware that these names are special, and require fixed answers specified by IETF specification.</t>
 
             <t>DNS Registries/Registrars need not know anything about
             these two reverse mapping names, just as they do not need to know

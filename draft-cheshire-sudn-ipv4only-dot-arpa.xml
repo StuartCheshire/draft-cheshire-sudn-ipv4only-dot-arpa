@@ -16,7 +16,7 @@
 
 <!-- control the table of contents (ToC) -->
 <!-- generate a ToC -->
-<?rfc toc="no"?>
+<?rfc toc="yes"?>
 <!-- the number of levels of subsections in ToC. default: 3 -->
 <?rfc tocdepth="1"?>
 
@@ -74,7 +74,7 @@
 
     <abstract>
       <t>The specification for
-      how a client discovers its local network's NAT64 prefix [RFC7050]
+      how a client discovers its local network's NAT64 prefix (RFC7050)
       defines the special name 'ipv4only.arpa' for this purpose,
       but in its Domain Name Reservation Considerations section
       that specification indicates that the name actually has
@@ -88,7 +88,8 @@
 
       <t>This document describes the special treatment required,
       formally declares the special properties of the name,
-      and adds similar declarations for the corresponding reverse mapping names.</t>
+      adds similar declarations for the corresponding reverse mapping names,
+      and updates RFC7050.</t>
     </abstract>
   </front>
 

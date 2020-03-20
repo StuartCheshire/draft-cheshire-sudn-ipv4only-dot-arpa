@@ -747,7 +747,7 @@
 
       <t>Thanks to Erik Kline for pointing out that the in&nbhy;addr.arpa names are special too.</t>
 
-      <t>Thanks to Mark Andrews for pointing out the reasons why the 'ipv4only.arpa'
+      <t>Thanks to Mark Andrews for conclusively pointing out the reasons why the 'ipv4only.arpa'
       zone must be an insecure delegation in order for the
       <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref> to work,
       and many other very helpful comments.</t>
@@ -755,6 +755,9 @@
       <t>Thanks particularly to Lorenzo Colitti for an especially spirited hallway discussion at
       IETF 96 in Berlin, which lead directly to significant improvements in how this
       document presents the issues.</t>
+
+      <t>Thanks to Scott Bradner, Bernie Volz, Barry Leiba, Mirja Kühlewind, Suresh Krishnan,
+      Benjamin Kaduk, Roman Danyliw, Éric Vyncke and the other IESG reviewers for their thoughtful feedback.</t>
 
       <t>Thanks to Dave Thaler and Warren Kumari for generously helping
       shepherd this document through the publication process.</t>

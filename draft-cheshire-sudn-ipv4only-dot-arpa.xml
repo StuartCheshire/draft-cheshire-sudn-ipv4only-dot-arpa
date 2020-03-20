@@ -95,7 +95,7 @@
   </front>
 
   <middle>
-    <?rfc needLines="10" ?>
+    <?rfc needLines="22" ?>
     <section title="Introduction">
       <t>The specification for
       <xref target="RFC7050">how a client discovers its local network's NAT64 prefix</xref>
@@ -173,7 +173,7 @@
       The name 'ipv4only.arpa' is most definitely a special name,
       and needs to be listed in IANA's registry along with
       <xref target="SUDN">other DNS names that have special uses</xref>.</t>
-    <?rfc needLines="14" ?>
+    <?rfc needLines="4" ?>
     </section>
 
     <section title="Consequences of 'ipv4only.arpa' not being declared special">
@@ -273,7 +273,6 @@
         known in advance can add precious milliseconds of delay,
         affecting user experience on the client devices waiting
         for those synthesized replies.</t>
-<?rfc needLines="20" ?>
       </section>
 
     </section>
@@ -290,7 +289,6 @@
       <t>These changes affect two bodies of software,
       (a) the name resolution APIs and libraries on client devices, and
       (b) DNS64 implementations.</t>
-<?rfc needLines="30" ?>
 
       <t>The new special rules specified in this document for name resolution APIs and libraries
       state how they
@@ -341,7 +339,6 @@
       Network operators who wish to provide reliable, high performance service to
       their customers are motivated to prefer DNS64 gateways that recognize
       the special 'ipv4only.arpa' name and apply the appropriate optimizations.</t>
-<?rfc needLines="30" ?>
 
     </section>
 
@@ -387,7 +384,6 @@
       before it even issues the query. Avoiding this unnecessary
       query improves performance and reliability for the client,
       and reduces unnecessary load for the authoritative 'arpa' name servers.</t>
-<?rfc needLines="10" ?>
 
       <t>Hard-coding the known answers for
       'ipv4only.arpa' IPv4 address record queries (DNS qtype "A") in
@@ -697,7 +693,7 @@
           </list>
         </t>
 
-<?rfc needLines="20" ?>
+<?rfc needLines="27" ?>
         <section title="ip6.arpa Reverse Mapping PTR Records">
           <t>For all IPv6 addresses synthesized by a DNS64 recursive resolver,
           the DNS64 recursive resolver is responsible for

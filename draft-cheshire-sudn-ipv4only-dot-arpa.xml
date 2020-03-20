@@ -304,7 +304,7 @@
       Superficially this might seem like a security issue, since
       the user might have explicitly configured the particular DNS resolver they
       wish to use, and rather than using that, the name resolution code
-      ignores the users stated preference and uses untrusted input received from the network instead.
+      ignores the user's stated preference and uses untrusted input received from the network instead.
       However, the 'ipv4only.arpa' is not really a DNS query in the ususal sense;
       even though it may look like a DNS query, it is actually an improvised
       client-to-middlebox communication protocol in disguise.
@@ -312,7 +312,7 @@
       it is necessary for the interface on which NAT64 translation is being
       performed to tell the host the address of the DNS64 recursive resolver
       the host must use to learn the NAT64 prefix being used by that NAT64.
-      This typically done
+      This is typically done
       via <xref target="RFC8106">IPv6 Router Advertisement Options for DNS Configuration</xref>
       or via <xref target="RFC3646">DNS Configuration options for DHCPv6</xref>.
       </t>
@@ -424,9 +424,9 @@
       DNSSEC-capable resolvers that follow this specification
       MUST NOT attempt to validate answers received in response to
       queries for the IPv6 AAAA address records for 'ipv4only.arpa'.
-      Note that the name ipv4only.arpa has no use outside of being
+      Note that the name 'ipv4only.arpa' has no use outside of being
       this special DNS pseudo-query used to learn the DNS64/NAT64
-      address synthesis prefix, so the lack of DNSSEC security for that name not a problem.
+      address synthesis prefix, so the lack of DNSSEC security for that name is not a problem.
       </t>
 
       <t>The original <xref target="RFC7050">NAT64 Prefix Discovery specification</xref>
@@ -540,9 +540,9 @@
             On multi-homed devices
             (devices that allow more than one logical or physical IP
             interface to be active at the same time, e.g., two physical
-            interfaces, or one physical interface plus a VPN connection)
+            interfaces, or one physical interface plus a VPN connection),
             clients MUST use interface-aware name resolution APIs.
-            On different (logical or physical) interfaces different DNS64 answers may be received,
+            On different (logical or physical) interfaces, different DNS64 answers may be received,
             and DNS64 answers are only valid for the interface on which they were received.
             On multi-homed devices (including devices that support VPN),
             name resolution APIs that do not include interface parameters will not work reliably with NAT64.
@@ -580,23 +580,21 @@
             <vspace blankLines="1" />
             Forwarding or iterative recursive resolvers
             that have been explicitly configured to perform DNS64 address synthesis
-            in support of a companion NAT64 gateway (i.e, "DNS64 recursive resolvers"),
-            that are compliant with this specification,
+            in support of a companion NAT64 gateway (i.e, "DNS64 recursive resolvers")
             MUST recognize 'ipv4only.arpa' as special.
             The authoritative name servers for 'ipv4only.arpa' cannot be
             expected to know the local network's NAT64 address synthesis prefix,
-            so consulting the authoritative name servers for IPv6 address records for ipv4only.arpa is futile.
-            All DNS64 recursive resolvers compliant with this specification
-            MUST recognize 'ipv4only.arpa' (and all of its subdomains) as special,
+            so consulting the authoritative name servers for IPv6 address records for 'ipv4only.arpa' is futile.
+            All DNS64 recursive resolvers MUST recognize 'ipv4only.arpa' (and all of its subdomains) as special,
             and MUST NOT attempt to look up NS records for 'ipv4only.arpa',
             or otherwise query authoritative name servers in an attempt to resolve this name.
-            Instead, compliant DNS64 recursive resolvers MUST act
+            Instead, DNS64 recursive resolvers MUST act
             as authoritative for this zone, by generating immediate responses for all queries
             for 'ipv4only.arpa' (and any subdomain of 'ipv4only.arpa'), with the one
             exception of queries for the DS record.
             Queries for the DS record are resolved the usual way to allow a client
             to securely verify that the 'ipv4only.arpa' zone has an insecure delegation.
-            Note that exception is not expected to received widespread usage,
+            Note that this exception is not expected to receive widespread usage,
             since any client compliant with this specification already knows that
             'ipv4only.arpa' is an insecure delegation and will not attempt DNSSEC validation for this name.
             <vspace blankLines="1" />

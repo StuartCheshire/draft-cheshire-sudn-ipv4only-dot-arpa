@@ -165,7 +165,7 @@
       gateway and, if one is present,
       to request that it disclose the prefix it is using for IPv6 address synthesis.</t>
 
-      <t>This use of specially-crafted DNS queries as an impromptu
+      <t>This use of specially crafted DNS queries as an improvised
       client-to-middlebox communication protocol has a number of specific
       consequences, outlined below, which client software needs to take
       into account if the queries are to produce the desired results,
@@ -209,7 +209,8 @@
         <xref target="DNS9">Quad9</xref>.</t>
 
         <t>Another common scenario is the use of corporate or personal VPN client software.
-        The local network's recursive resolver will typically
+        Both for privacy reasons, and also because
+        the local network's recursive resolver will typically
         be unable to provide answers for the company's private internal host names,
         so VPN client software overrides the
         local network's default configuration,
@@ -305,7 +306,7 @@
       the user might have explicitly configured the particular DNS resolver they
       wish to use, and rather than using that, the name resolution code
       ignores the user's stated preference and uses untrusted input received from the network instead.
-      However, the 'ipv4only.arpa' is not really a DNS query in the ususal sense;
+      However, the 'ipv4only.arpa' query is not really a DNS query in the ususal sense;
       even though it may look like a DNS query, it is actually an improvised
       client-to-middlebox communication protocol in disguise.
       For NAT64 to work at all,
@@ -409,12 +410,14 @@
       In principle, if this were a secure delegation, and 'ipv4only.arpa' were
       a signed zone, then the path from the authoritative server to the DNS64
       recursive resolver would still work, but DNSSEC is not necessary here.
-      Run-time cryptographic signatures are not needed to verify compile-time constants.</t>
+      Run-time cryptographic signatures are not needed to verify compile-time constants.
+      Validating the signatures could only serve to introduce potential failures
+      into the system for minimal benefit.</t>
 
       <t>The path from the DNS64 recursive resolver to the ultimate client
       (queries for IPv6 address records)
       *cannot* be protected by DNSSEC, because the DNS64 recursive resolver
-      is synthesizing IPv6 address answers, and does not possess the secret
+      is synthesizing IPv6 address answers, and does not possess the DNSSEC secret
       key required to sign those answers.</t>
 
       <t>Consequently, the 'ipv4only.arpa' zone MUST be an insecure delegation,
@@ -425,7 +428,7 @@
       MUST NOT attempt to validate answers received in response to
       queries for the IPv6 AAAA address records for 'ipv4only.arpa'.
       Note that the name 'ipv4only.arpa' has no use outside of being
-      this special DNS pseudo-query used to learn the DNS64/NAT64
+      used for this special DNS pseudo-query used to learn the DNS64/NAT64
       address synthesis prefix, so the lack of DNSSEC security for that name is not a problem.
       </t>
 
@@ -601,7 +604,7 @@
             DNS64 recursive resolvers MUST generate
             the 192.0.0.170 and 192.0.0.171 responses for IPv4 address queries (DNS qtype "A"),
             the appropriate synthesized IPv6 address record responses for IPv6 address queries (DNS qtype "AAAA"),
-            and a negative ("no&nbsp;error&nbsp;no&nbsp;answer") response for all other query types.
+            and a negative ("no&nbsp;error&nbsp;no&nbsp;answer") response for all other query types except DS.
             <vspace blankLines="1" />
             For all subdomains of 'ipv4only.arpa', DNS64 recursive resolvers MUST generate immediate NXDOMAIN responses.
             All names falling below 'ipv4only.arpa' are defined to be nonexistent.

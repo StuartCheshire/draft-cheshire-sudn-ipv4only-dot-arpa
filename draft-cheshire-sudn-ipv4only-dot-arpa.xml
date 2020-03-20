@@ -37,7 +37,7 @@
 <?rfc rfcprocack="yes" ?>
 <!-- end of list of popular I-D processing instructions -->
 
-<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-16" ipr="trust200902" updates="7050">
+<rfc category="std" docName="draft-cheshire-sudn-ipv4only-dot-arpa-17" ipr="trust200902" updates="7050">
   <front>
     <title abbrev="Special Name ipv4only.arpa">Special Use Domain Name 'ipv4only.arpa'</title>
 
@@ -70,7 +70,7 @@
       </address>
     </author>
 
-    <date day='21' month='February' year='2020'/>
+    <date day='19' month='March' year='2020'/>
 
     <abstract>
       <t>The specification for

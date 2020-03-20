@@ -517,13 +517,6 @@
             NAT64 prefix MUST be sent to the
             DNS recursive resolver address(es) the client learned via the configuration
             machinery for that specific client interface.
-            One implication of this is that,
-            on any host with multiple physical interfaces (e.g., cellular data and Wi-Fi)
-            and/or multiple virtual interfaces (e.g., VPN tunnels),
-            for a client to learn the NAT64 prefix in use on a particular interface,
-            the DNS name resolution APIs used to look up the IPv6 addresses for
-            'ipv4only.arpa' MUST include a parameter for the client to specify
-            on which interface to perform this query.
             The NAT64 prefix is a per-interface property, not a per-device property.
             <vspace blankLines="1"/>
             Regardless of any manual client DNS configuration, DNS overrides
@@ -540,18 +533,19 @@
             communication protocol, it is essential that they go to the correct middlebox
             for the interface in question, and failure to honor this requirement would cause failure of
             the <xref target="RFC7050">NAT64 Prefix Discovery mechanism</xref>.
-            On multi-homed devices
+            <vspace blankLines="1"/>
+            One implication of this is that, on multi-homed devices
             (devices that allow more than one logical or physical IP
-            interface to be active at the same time, e.g., two physical
-            interfaces, or one physical interface plus a VPN connection),
+            interface to be active at the same time, e.g., cellular data and Wi-Fi,
+            or one physical interface plus a VPN connection),
             clients MUST use interface-aware name resolution APIs.
             On different (logical or physical) interfaces, different DNS64 answers may be received,
             and DNS64 answers are only valid for the interface on which they were received.
             On multi-homed devices (including devices that support VPN),
             name resolution APIs that do not include interface parameters will not work reliably with NAT64.
             On single-homed devices, interface-unaware name resolution APIs
-            are acceptable since there is no need to specify an interface
-            when only one interface can be active at a time.
+            are acceptable since when only one interface can be active
+            at a time there is no need to specify an interface.
             <vspace blankLines="1"/>
             DNSSEC-capable resolvers MUST NOT attempt to validate answers received
             in response to queries for the IPv6 AAAA address records for 'ipv4only.arpa',

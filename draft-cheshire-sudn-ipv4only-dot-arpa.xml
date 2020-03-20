@@ -304,7 +304,7 @@
       the user might have explicitly configured the particular DNS resolver they
       wish to use, and rather than using that, the name resolution code
       ignores the user's stated preference and uses untrusted input received from the network instead.
-      However, the 'ipv4only.arpa' query is not really a DNS query in the ususal sense;
+      However, the 'ipv4only.arpa' query is not really a DNS query in the usual sense;
       even though it may look like a DNS query, it is actually an improvised
       client-to-middlebox communication protocol in disguise.
       For NAT64 to work at all,

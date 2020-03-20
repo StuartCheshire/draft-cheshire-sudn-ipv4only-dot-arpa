@@ -212,7 +212,7 @@
         Both for privacy reasons, and also because
         the local network's recursive resolver will typically
         be unable to provide answers for the company's private internal host names,
-        so VPN client software overrides the
+        VPN client software usually overrides the
         local network's default configuration,
         to divert some or all DNS requests to the company's own private internal
         recursive resolver, reached through the VPN tunnel.

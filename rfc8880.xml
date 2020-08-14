@@ -47,8 +47,11 @@
 
 <!-- [rfced] Please insert any keywords (beyond those that appear in
 the title) for use on https://www.rfc-editor.org/search. -->
+<!-- [SC] done -->
 
-<keyword>example</keyword>
+<keyword>IPv6</keyword>
+<keyword>NAT64</keyword>
+<keyword>DNS64</keyword>
 
 <!--[rfced] We note that the entire first paragraph of the Abstract is
 a single sentence (and adding the expansion of NAT64 makes this
@@ -77,6 +80,7 @@ properties that would require special handling.  Additionally, RFC 7050 did not
 request the registration of 'ipv4only.arpa' in the "Special-Use Domain
 Names" IANA registry. 
 
+[SC] fixed
 -->
     <abstract>
       <t>NAT64 (Network Address and Protocol Translation from IPv6
@@ -84,12 +88,12 @@ Names" IANA registry.
       communicate with servers that have only IPv4 connectivity.</t>
       <t>The specification for how a client discovers its local network's
       NAT64 prefix (RFC 7050) defines the special name
-      'ipv4only.arpa' for this purpose, but in its Domain Name Reservation
+      'ipv4only.arpa' for this purpose.
+      However, in its Domain Name Reservation
       Considerations section (Section 8.1),
       that specification (RFC 7050) indicates that the name
       actually has no particularly special properties that would require
-      special handling and does not request IANA to record the name in the
-      Special-Use Domain Names registry.</t>
+      special handling.</t>
       <t>Consequently, despite the well-articulated special purpose of the name,
       'ipv4only.arpa' was not recorded in the
       Special-Use Domain Names registry
@@ -138,7 +142,7 @@ Names" IANA registry.
       special treatment. Software implementers were left with the choice
       between not implementing the special behavior necessary for the name
       queries to work correctly or implementing the special behavior
-      and being accused of being noncompliant with some RFC.</t>
+      and being accused of being noncompliant with IETF DNS specifications.</t>
 
 <!--[rfced] Please review the use of "some RFC" in this text.  Should
 some citation or modifier be added to help the reader understand
@@ -151,6 +155,8 @@ Original:
    between not implementing the special behavior necessary for the name
    queries to work correctly, or implementing the special behavior and
    being accused of being noncompliant with some RFC.
+
+[SC] fixed
 -->
       
       <t>This document describes the special treatment required,
@@ -171,7 +177,7 @@ Original:
       </section>
     </section>
     <section numbered="true" toc="default">
-      <name>Specialness of 'ipv4only.arpa'</name>
+      <name>Reasons to Declare 'ipv4only.arpa' as Special</name>
 <!--[rfced] May we update this section title?
 
 Original:
@@ -183,6 +189,7 @@ Uniqueness of 'ipv4only.arpa'
 Perhaps B:
 Reasons to Declare 'ipv4only.arpa' as Special
 
+[SC] fixed
 -->
       
 <!--[rfced] Is "peculiar" the right word here?  Perhaps "unusual" or
@@ -192,6 +199,7 @@ Original:
    The hostname 'ipv4only.arpa' is peculiar in that it was never
    intended to be treated like a normal hostname.
 
+[SC] I think "peculiar" is the right word: strange or odd
 -->
       
       <t>The hostname 'ipv4only.arpa' is peculiar in that it was never intended
@@ -225,6 +233,8 @@ Or perhaps:
    'ipv4only.arpa' (which is contrary to general DNS expectations given that
    it is already known by IETF specification [RFC7050] that 'ipv4only.arpa'
    is an IPv4-only name) which has no IPv6 AAAA address records.
+
+[SC] I made a small change here, which I hope helps the readability
 -->
       <t>In contrast, clients often look up the IPv6 AAAA address records for
       'ipv4only.arpa', which is contrary to general DNS expectations, given
@@ -312,6 +322,8 @@ Or perhaps:
    overrides the local network's default configuration) to divert some
    or all DNS requests to the company's own private internal recursive
    resolver, reached through the VPN tunnel.
+
+[SC] fixed
 -->
 
 <!-- [rfced] In the following sentence, is "some company's" meant to mean a
@@ -325,9 +337,11 @@ Original:
 Perhaps:
    The local network's recursive resolver cannot give answers for some
    companies' private internal host names
+
+[SC] fixed
  --> 
  <t>Another common scenario is the use of corporate or personal VPN client
- software.  Both for privacy reasons, and also because the local network's
+ software.  Both for privacy reasons and because the local network's
  recursive resolver will typically be unable to provide answers for the
  company's private internal host names, VPN client software usually overrides the
  local network's default configuration, to divert some or all DNS requests to
@@ -339,9 +353,11 @@ Perhaps:
  recursive resolver is unlikely to be aware of the NAT64 prefix in use on the
  NAT64 network to which the client device is currently attached.  It is clear
  that a single recursive resolver cannot meet both needs.  The local network's
- recursive resolver cannot give answers for some company's private internal
- host names, and some company's private internal recursive resolver cannot
- give correctly synthesized IPv6 addresses suitable for the local network's
+ recursive resolver cannot
+ be expected to give answers for some unknown company's private internal
+ host names, and a company's private internal recursive resolver cannot
+ be expected to give correctly synthesized IPv6 addresses suitable
+ for some unknown local network's
  NAT64 gateway.</t>
         <t>Note that multiple NAT64 services may be simultaneously available
         to a client.  For example, the local network may provide NAT64 service

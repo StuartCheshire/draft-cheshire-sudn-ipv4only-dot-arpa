@@ -79,17 +79,20 @@ Names" IANA registry.
 
 -->
     <abstract>
+      <t>NAT64 (Network Address and Protocol Translation from IPv6
+      Clients to IPv4 Servers) allows client devices using IPv6 to
+      communicate with servers that have only IPv4 connectivity.</t>
       <t>The specification for how a client discovers its local network's
-      Network Address and Protocol Translation from IPv6 Clients to IPv4
-      Servers (NAT64) prefix (RFC 7050) defines the special name
+      NAT64 prefix (RFC 7050) defines the special name
       'ipv4only.arpa' for this purpose, but in its Domain Name Reservation
-      Considerations section (Section 8.1 of RFC 7050), that specification indicates that the name
+      Considerations section (Section 8.1),
+      that specification (RFC 7050) indicates that the name
       actually has no particularly special properties that would require
       special handling and does not request IANA to record the name in the
-      "Special-Use Domain Names" registry.</t>
+      Special-Use Domain Names registry.</t>
       <t>Consequently, despite the well-articulated special purpose of the name,
       'ipv4only.arpa' was not recorded in the
-      "Special-Use Domain Names" registry
+      Special-Use Domain Names registry
       as a name with special properties.</t>
       <t>This document describes the special treatment required,
       formally declares the special properties of the name,
@@ -104,8 +107,8 @@ Names" IANA registry.
       <t>The specification for <xref target="RFC7050" format="default">how a
       client discovers its local network's NAT64 prefix</xref> defines the
       special name 'ipv4only.arpa' for this purpose, but in its Domain Name
-      Reservation Considerations section (<xref target="RFC7050" section="8.1"
-      format="default"/>), that specification indicates that the name actually
+      Reservation Considerations section (Section 8.1),
+      that specification <xref target="RFC7050"/> indicates that the name actually
       has no particularly special properties that would require special
       handling and does not request IANA to record the name in the <xref
       target="SUDN" format="default">Special-Use Domain Names
@@ -114,8 +117,8 @@ Names" IANA registry.
       'ipv4only.arpa' was not recorded in the
       <xref target="SUDN" format="default">Special-Use Domain Names registry</xref>
       as a name with special properties.</t>
-      <t>This omission was discussed in
-      <xref target="RFC8244" format="default">the "Special-Use Domain Names Problem Statement"</xref>.</t>
+      <t>This omission was discussed in the document
+      <xref target="RFC8244" format="default">"Special-Use Domain Names Problem Statement"</xref>.</t>
       <t>As a result of this omission, in cases where software needs
       to give this name special treatment in order for it to work correctly,
       there was no clear mandate authorizing software authors to implement that
@@ -250,8 +253,8 @@ Or perhaps:
         use a recursive resolver other than the one it learned from the network.</t>
         <t>A device joining a NAT64
         network will learn the recursive resolver recommended for that network, typically
-        via <xref target="RFC8106" format="default">"IPv6 Router Advertisement Options for DNS Configuration"</xref>
-        or via <xref target="RFC3646" format="default">"DNS Configuration Options for DHCPv6"</xref>.
+        via <xref target="RFC8106" format="default">IPv6 Router Advertisement Options</xref>
+        or via <xref target="RFC3646" format="default">DHCPv6</xref>.
         On a NAT64 network, it is essential that the client use the
         DNS64 recursive resolver recommended for that network, since only that recursive resolver can
         be relied upon to know the appropriate prefix(es) to use for synthesizing IPv6
@@ -313,7 +316,7 @@ Perhaps:
  <t>Another common scenario is the use of corporate or personal VPN client
  software.  Both for privacy reasons, and also because the local network's
  recursive resolver will typically be unable to provide answers for the
- company's private internal host names, so VPN client software overrides the
+ company's private internal host names, VPN client software usually overrides the
  local network's default configuration, to divert some or all DNS requests to
  the company's own private internal recursive resolver, reached through the
  VPN tunnel.  As with the case described above of public recursive resolver
@@ -343,7 +346,7 @@ Perhaps:
         The first purpose is retrieving data from a (nominally) global database,
         generally retrieving the IP address(es) associated with a hostname.
         The second purpose is using the DNS protocol as a middlebox communication
-        protocol to interrogate the local network infrastructure to discover
+        protocol, to interrogate the local network infrastructure to discover
         the IPv6 prefix(es) in use by the local NAT64 gateway for address synthesis.</t>
       </section>
       <section numbered="true" toc="default">
@@ -374,7 +377,7 @@ Perhaps:
     <section numbered="true" toc="default">
       <name>Remedies</name>
       <t>This document leverages operational experience to update the <xref
-      target="RFC6761" format="default">"Domain Name Reservation Considerations"
+      target="RFC6761" format="default">Domain Name Reservation Considerations
       section</xref> of <xref target="RFC7050" format="default">the earlier
       specification</xref> with one that more accurately lists the actual
       special properties of the name 'ipv4only.arpa', so that software can
@@ -472,7 +475,7 @@ is prepared to do DNS64 itself.
       before it even issues the query. Avoiding this unnecessary
       query improves performance and reliability for the client
       and reduces unnecessary load for the authoritative 'arpa' name servers.</t>
-      <t>Hard coding the known answers for
+      <t>Hardcoding the known answers for
       'ipv4only.arpa' IPv4 address record queries (DNS qtype "A") in
       recursive resolvers also reduces the risk of malicious devices
       intercepting those queries and returning incorrect answers.
@@ -529,7 +532,7 @@ DNSSEC.
       <t>IANA has created an insecure delegation for 'ipv4only.arpa'
       to allow DNS64 recursive resolvers to create synthesized AAAA answers within that zone.</t>
       <t>IANA has recorded the following names in the 
-      <xref target="SUDN" format="default">"Special-Use Domain Names" registry</xref>:
+      <xref target="SUDN" format="default">Special-Use Domain Names registry</xref>:
       </t>
       <ul empty="true" spacing="compact">
         <li>ipv4only.arpa.</li>
@@ -537,7 +540,7 @@ DNSSEC.
         <li>171.0.0.192.in&nbhy;addr.arpa.</li>
       </ul>
       <t>IANA has recorded the following IPv4 addresses in the 
-      <xref target="SUv4" format="default">"IANA IPv4 Special-Purpose Address Registry"</xref>:
+      <xref target="SUv4" format="default">IANA IPv4 Special-Purpose Address Registry</xref>:
       </t>
       <ul empty="true" spacing="compact">
         <li>192.0.0.170</li>
@@ -736,7 +739,7 @@ DNSSEC.
         '171.0.0.192.in&nbhy;addr.arpa'</name>
         <t>Since the IPv4 addresses 192.0.0.170 and 192.0.0.171 are defined to
         be special, and are listed in the <xref target="SUv4"
-        format="default">"IANA IPv4 Special-Purpose Address Registry"</xref>, the
+        format="default">IANA IPv4 Special-Purpose Address Registry</xref>, the
         corresponding reverse mapping names in the in&nbhy;addr.arpa domain
         are similarly special.</t>
         <t>The name '170.0.0.192.in&nbhy;addr.arpa' is defined, <xref
@@ -762,7 +765,7 @@ DNSSEC.
           <li>
             <t>Application software <bcp14>SHOULD NOT</bcp14> recognize these
             two reverse mapping names as special and <bcp14>SHOULD
-            NOT</bcp14> treat them differently.</t> <t> For example, if the
+            NOT</bcp14> treat them differently. For example, if the
             user were to issue the Unix command "host&nbsp;192.0.0.170", then
             the "host" command should call the name resolution API or library
             as usual and display the result that is returned.</t>
@@ -948,7 +951,7 @@ DNSSEC.
     <section anchor="Acknowledgements" numbered="false" toc="default">
       <name>Acknowledgements</name>
       <t>Thanks to <contact fullname="Jouni Korhonen"/>, <contact
-      fullname="Teemu Savolainen"/>, and <contact fullname="Dan Wing"/> for devising the <xref
+      fullname="Teemu Savolainen"/>, and <contact fullname="Dan Wing"/>, for devising the <xref
       target="RFC7050" format="default">NAT64 Prefix Discovery
       mechanism</xref> and for their feedback on this document.</t>
       <t>Thanks to <contact fullname="Geoff Huston"/> for his feedback on this document.</t>

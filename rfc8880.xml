@@ -496,10 +496,10 @@ is prepared to do DNS64 itself.
       model, which reduces the DNS64 machinery to the vestigial role of
       simply responding to the 'ipv4only.arpa' query to report the local
       IPv6 address synthesis prefix.
-      At the time of publication network operators have been
+      At the time of publication, network operators have been
       observed "in the wild" deploying NAT64 service with DNS
       recursive resolvers that reply to 'ipv4only.arpa' queries
-      but otherwise perform no other IPv6 address synthesis.
+      but otherwise perform no other NAT64 address synthesis.
       In no case does the client care what
       answer(s) the authoritative 'arpa' name servers might give for that query.
       The 'ipv4only.arpa' query is being used purely as a local
